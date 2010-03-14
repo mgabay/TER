@@ -1,0 +1,424 @@
+\section{Bibliographie}
+\subsection{Définitions générales}
+Graphe $G(X,E)$.
+
+\begin{defin}[Ensemble d'articulation]
+Si $G(X,E)$ est connexe et $A \in X$ est tel que $G_{X-A}$ n'est plus connexe,
+alors $A$ est un ensemble d'articulation de $G$.
+\end{defin}
+
+\begin{defin}[Pièces]
+Les composantes connexes $C_1,...C_p$ de $G_{X-A}$ définissents des graphes connexes :
+$G_{C_1 \cup A},..., G_{C_p \cup A}$ appelés les pièces (relativement à $A$).
+\end{defin}
+
+\begin{defin}[Stable]
+$S\in X$ est stable si deux sommets distincts de $S$ ne sont jamais adjacents, i.e. :
+$\Gamma_G(S) \cap S = \varnothing$.
+\end{defin}
+
+\begin{defin}[Nombre de stabilité]
+Soit $\mathcal{S}$ la famille des ensembles stables du graphe, le nombre de stabilité du graphe $G$ est :
+$$\alpha(G)=\underset{S\in\mathcal{S}}{max}|S|$$
+\end{defin}
+
+\begin{defin}[Graphe planaire]
+Un graphe $G$ est planaire s'il est possible de le représenter sur un plan de sorte que
+les sommets soient des points distincts, les arêtes des courbes simples, et que deux arêtes
+ne se rencontrent pas en dehors de leurs extrémités.
+\end{defin}
+
+\begin{defin}[Base d'un graphe]
+$B$ est une base de $G(X,U)$ si :
+\begin{enumerate}
+ \item il n'existe pas de chemin reliant deux sommets distincts de $B$
+ \item Tout sommet $x \notin B$ est l'extrémité initiale d'un chemin aboutissant dans $B$
+\end{enumerate}
+\end{defin}
+
+\begin{defin}[Point d'articulation]
+Sommet dont la suppression augmente le nombre de composantes connexes
+\end{defin}
+
+\begin{defin}[Isthme]
+Arête dont la suppression augmente le nombre de composantes connexes
+\end{defin}
+
+\begin{defin}[Bloc]
+Ensemble de sommets $A$ qui engendre un sous-graphe $G_A$ connexe, sans points d'articulation,
+et maximal avec cette propriété.
+\end{defin}
+
+\begin{defin}[Graphe parfait]
+Graphe tel que pour tout sous-graphe induit, le nombre chromatique est égal à la taille de la plus grande clique.
+\end{defin}
+
+\subsection{Etude générale}
+Livre : cf \cite{berge-graphes}.
+\subsubsection{Coloration des arêtes}
+Référence : \cite{berge-arretes} + cf notes écrites
+\subsubsection{Coloration des sommets}
+Référence : \cite{berge-sommets}
+\setcounter{defin}{0}
+
+\begin{defin}[Nombre chromatique]
+Plus petit nombre de couleurs nécessaire pour colorier les sommets, de 
+sorte que deux sommets adjacents ne soient pas de même couleur.
+Désigné par $\chi(G)$.
+\end{defin}
+
+\begin{defin}[Graphe k-chromatique]
+Graphe tel que $\chi(G) \leq k$.
+\end{defin}
+
+
+\paragraph{Algorithmes pour la recherche du nombre chromatique}
+\subparagraph{Principe des reliements-contractions :}
+Soient $a$ et $b$ deux sommets de $G$ non adjacents,
+on appelle \textit{reliement} le graphe $\tilde{G}=G \cup [a,b]$.
+On appelle contraction le graphe $\bar{G}$ obtenu en assimilant
+$\{ a,b \}$ à un sommet unique $c(a,b)$ joint à tout sommet $x \neq a,b$ de
+$G$ adjacent à $a$ et/ou $b$.
+
+Dans tout coloration de G, ou bien les sommets $a$ et $b$ ont la même couleur (et
+alors c'est une coloration de $\bar G$) ou bien ils sont de couleurs différents (et
+alors c'est une coloration de $\tilde G$).
+
+En répétant le processus des reliements-contractions autant que possible pour $\bar G$
+et $\tilde G$ considérés séparément, on finira par obtenir des graphes qui sont des cliques,
+et pour lesquels le nombre chromatique est nécessairement égal au nombre de sommets.
+Si la plus petit clique obtenue est une k-clique, on a : $\chi (G)=k$.
+
+\subparagraph{Principe de la séparation des pièces :}
+Si au cours de la procédure de reliements-contractions, on obtient un graphe admettant comme
+ensemble d'articulation une clique $A$, la suppression de $A$ crée des composantes connexes
+$C_1, C_2,\dots$; on remarque alors que les sous-graphes $G_{A \cup C_1}= H_1$, $G_{A \cup C_2}=H2,\dots$
+peuvent être coloriés séparément à condition de faire coïncider les couleurs des sommets de $A$
+dans chaque sous-graphe.
+
+\begin{theorem}
+Si G est un graphe d'ordre n, on a :
+\begin{math}
+\begin{cases}
+\chi(G) * \alpha(G) & \geq n \\
+\chi(G) + \alpha(G) & \leq n + 1
+\end{cases}
+\end{math}
+\end{theorem}
+
+\begin{theorem}[Gaddum, Nordhaus, 1960]
+Si $\bar G$ est le graphe simple complémentaire du graphe simple $G$, on a :
+$$\chi(G)+\chi(\bar G) \leq n+1$$
+De plus, cette borne est la meilleur possible.
+\end{theorem}
+
+\begin{corollaire}
+Si $\bar G$ est le graphe simple complémentaire d'un graphe simple $G$ d'ordre n, on a :
+$$\chi(G)\chi(\bar G)\leq \left(\frac{n+1}{2}\right)^2$$
+Cette borne est la meilleur possible.
+\end{corollaire}
+
+\begin{theorem}
+Dans un graphe simple $G$ de $n$ sommets et $m$ arêtes, on a :
+$$\chi(G) \geq \frac{n^2}{n^2-2m}$$
+\end{theorem}
+
+\begin{theorem}[Roy, 1967; Gallai, 1968]\label{Roy}
+Etant donné un graphe simple $G=(X,E)$ avec $\chi(G)=q$, pour toute orientation des arêtes
+il existe un chemin élémentaire de longueur $\geq q-1$ ; en outre, pour une certaine orientation,
+il n'existera pas de chemin de longueur $> q-1$.
+\end{theorem}
+
+\begin{corollaire}
+Si $G$ est un graphe simple coloré avec $q=\chi(G)$ couleurs $\alpha_1,\dots,\alpha_q$, il
+existe une chaîne élémentaire qui rencontre successivement les $q$ couleurs $\alpha_i$
+dans cet ordre.
+\end{corollaire}
+\setcounter{corollaire}{0}
+
+\begin{rmq}
+Le théorème \ref{Roy} implique l'existence d'un chemin hamiltonien dans un graphe complet.
+\end{rmq}
+\setcounter{rmq}{0}
+
+\begin{theorem}
+Si dans un graphe simple $G$, une partition $(S_1,S_2,\dots,S_q)$ est une $q$-coloration (pas
+forcément minimale) et si l'on pose $d_k=\underset{x\in S_k}{max}\ d_G(x)$, alors :
+$$\chi(G) \leq \underset{k \leq q}{max}\ min \{k, d_k+1\}$$ 
+\end{theorem}
+
+\begin{corollaire}
+Soit $G$ un graphe simple dont les sommets sont indexés de sorte que $d_G(x_1)\geq d_G(x_2)\geq
+\cdots\geq d_G(x_n)$.
+Si, pour un entier $q \geq 0$, le nombre de sommets de degré $\geq q+1$ est $\leq q+1$ (et
+en particulier, pour $q \leq n-2$, si $d_G(x_{q+2})\leq q$), alors on a $\chi(G) \leq q+1$.
+\end{corollaire}
+
+\begin{corollaire}
+Si $G$ est un graphe simple de degré maximum $h$, on a $\chi(G)\leq h+1$.
+\end{corollaire}
+\setcounter{corollaire}{0}
+
+\begin{rmq}[Utilisation du théorème 5 pour une meilleure borne sup]
+Trouver une $k$-coloration $(S_1,\dots,S_k)$ telle que $S_1$ un ensemble stable
+maximal qui contient beaucoup de sommets de degrés élevés, $S_2$ ensemble stable maximal
+de $X-S_1$ qui contient le plus possible de sommets de degrés élevés...
+\end{rmq}
+
+\begin{rmq}[Gamme des degrés étendue]
+Lorsque $\xi = |\{d_G(x) / x\in X\}|$ est élevé, cette méthode est intéressante :
+$$\left [\left [\frac{\xi}{2}\right]\frac{1}{n-\xi} \right ]+1\leq \chi(G)\leq n-\left [\frac{\xi}{2}\right]$$
+\end{rmq}
+\setcounter{rmq}{0}
+
+\begin{theorem}[brooks, 1941]
+Soit $G$ un graphe simple de degré maximum $h$, qui n'admet pas pour composante
+connexe une $(h+1)$-clique (ni, si $h=2$, un cycle impair); alors on a $\chi(G)\leq h$.
+\end{theorem}
+
+\subsubsection{Graphes $\chi$-critiques}
+\setcounter{prop}{0}
+
+\begin{defin}[Graphe $\chi$-critique]
+Un graphe $G$ simple est dit $\chi$-critique si pour tout sommet $x_0$, le sous-graphe $G_0$
+engendré par $X-\{x_0\}$ a un nombre chromatique $\chi(G_0) < \chi(G)$.
+\end{defin}
+
+\begin{prop}
+Dans tout graphe $G$ avec $\chi(G)=q+1$, il existe un sous-graphe $\chi$-critique avec $\chi(G)=q+1$.
+\end{prop}
+
+\begin{prop}
+Dans un graphe simple $\chi$-critique avec $\chi(G)=q+1$, le degré de chaque sommet $x$ vérifie :
+$$d_G(x)\geq q$$
+\end{prop}
+
+\begin{prop}
+Un graphe $\chi$-critique est connexe.
+\end{prop}
+
+\begin{prop}\label{crit-clique}
+Un graphe $\chi$-critique n'admet pas une clique pour ensemble d'articulation.
+\end{prop}
+
+\begin{prop}
+Un graphe $\chi$-critique n'admet pas de points d'articulation.
+\end{prop}
+
+\begin{prop}
+Si $G$ est $\chi$-critique et avec $\chi(G)=q+1$ et si $A=\{a,b\}$ est un ensemble d'articulation
+de deux éléments, il y a exactement deux pièces $B'_1 et B'_2$ relatives à cet ensemble d'articulation, et on a :
+$$\chi(B'_1)=\chi(B'_2)=q$$
+\end{prop}
+
+\begin{prop}
+SI $G$ est $\chi$-critique avec $\chi(G)=q+1\geq 4$, et si $A=\{a,b,c\}$ est un ensemble
+d'articulation de trois éléments :
+\begin{enumerate}
+ \item S'il y a une arête dans $A$ : cet ensemble d'articulation admet au plus 3 pièces,
+et celles-ci sont de nombre chromatique $q$.
+ \item S'il y a deux arête dans $A$ : cet ensemble d'articulation admet au plus 2 pièces,
+et celles-ci sont de nombre chromatique $q$.
+ \item S'il y a trois arête dans $A$, $G$ n'est pas $\chi$-critique (prop \ref{crit-clique}).
+ \item S'il n'y a pas d'arêtes dans $A$ : cet ensemble d'articulation admet au plus 5 pièces,
+et celles-ci sont de nombre chromatique $q$ ou $q-1$.
+\end{enumerate}
+\end{prop}
+
+\begin{prop}
+Un graphe $G=(X,E)$, $\chi$-critique, avec $\chi(G)=q+1$, ne peut être disconnecté par l'élimination
+de $q-1$ arêtes ; autrement dit :
+$$m_G(A,X-A)\geq q\ \ \ \ (A\in X, A \neq \varnothing,X).$$
+\end{prop}
+
+\begin{theorem}
+Si $G$ est un graphe $\chi$-critique avec $\chi(G)=q+1$, on a $d_G(x)\geq q$ pour tout $x$ et
+le sous-graphe $G_M$ engendré par $M=\{x/x\in X, d_G(x)=q\}$ a pour chacun de ses blocs soit une clique
+soit un cycle impair sans cordes.
+\end{theorem}
+
+\begin{theorem}[Dirac, 1952]
+Si $G$ est un graphe de nombre chromatique $\chi(G)=q+1$, sans cliques de $q+1$ éléments, et
+si l'on pose $S=\{x / d_G(x)>q\}$, alors on a :
+$$\sum_{x \in S} (d_G(x)-q) \geq q-2$$
+\end{theorem}
+
+\begin{corollaire}
+Si $G$ est $\chi$-critique avec $\chi(G)=q+1$ et sans cliques de $(q+1)$ éléments, alors le nombre $n$
+de sommets et le nombre $m$ des arêtes vérifient :
+$$2m\geq (n+1)q-2$$
+\end{corollaire}
+\setcounter{corollaire}{0}
+
+\subsubsection{Construction de Haj\'{o}s}
+\begin{defin}[Contraction élémentaire]
+Soit $G$ un graphe simple ; on appelle contraction élémentaire sur $G$ tout opération qui
+consiste à retirer deux sommets adjacents $a$ et $b$ de $G$ et à ajouter un sommet $c$ que
+l'on relie à tous les sommets de $\Gamma_G(a)\cup\Gamma_G(b)$
+\end{defin}
+
+\conj[Hadwiger, 1943]
+Tout graphe $G$ connexe avec $\chi(G)=q$ peut devenir un graphe complet à $q$ sommets au
+moyen de contractions élémentaires.
+
+\paragraph{Transformation de Haj\'{o}s}$ $\\
+Permet de construire à partir d'une $(q+1)$-clique tous les graphes qui ne sont pas $q$-chromatiques.
+
+Soit $\mathcal{G}_q$ la classe de graphes tels que $\chi(G)>q$. On considère les trois
+opérations suivantes sur $\mathcal{G}_q$ :
+\begin{enumerate}
+ \item\label{op1} On ajoute des arêtes et des sommets à $G\in\mathcal{G}_q$.
+ \item\label{op2} Soient $G_1$ et $G_2$ deux graphes disjoints de $\mathcal{G}_q$, soient $a_1$, $b_1$ deux
+sommets adjacents dans $G_1$ et soient $a_2$, $b_2$ adjacents dans $G_2$ ; on enlève l'arête $[a_1, b_1]$
+dans $G_1$, l'arête $[a_2,b_2]$ dans $G_2$, on identifie $a_1$ et $a_2$, et l'on joint $b_1$ et $b_2$ par
+une arête.
+ \item\label{op3} On contracte en un seul point deux sommets non adjacents du graphe $G \in \mathcal{G}_q$.
+\end{enumerate}
+
+\begin{theorem}[Haj\'{o}s, 1961]
+Tout graphe $G$ tel que $\chi(G)>q$ peut être obtenu à partir de la $(q+1)$-clique $K_{q+1}$ à
+l'aide des opérations \ref{op1}, \ref{op2} et \ref{op3}.
+\end{theorem}
+
+\subsubsection{Dénombrement des colorations : polynômes chromatiques}
+\setcounter{prop}{0}
+$G=(X,E)$ un graphe, $x_1,\dots,x_n$ ses sommets.
+
+\begin{defin}[Nombre de $\lambda$-colorations]
+Nombre d'application $f(x) : X \longrightarrow \{1,2,\dots,\lambda\}$ telles que :
+\begin{eqnarray*}
+[x,y]\in E & \Rightarrow & f(x)\neq f(y)
+\end{eqnarray*}
+\end{defin}
+
+\begin{defin}[Polynôme chromatique de $G$ en $\lambda$]
+Fonction $P(G; \lambda)$ qui exprime le nombre des $\lambda$-colorations de $G$.
+\end{defin}
+
+\begin{rmq}
+On désigne par $[\lambda]_n$ : $\lambda(\lambda-1)\dots(\lambda-n+1)$.
+\end{rmq}
+
+\begin{prop}
+Soit $a$, $b$ deux sommets non adjacents du graphe $G$, soit $\tilde G$ le
+graphe obtenu à partir de $G$ en reliant $a$ et $b$ par une nouvelle arête, et
+soit $\bar G$ le graphe obtenu à partir de $G$ en contractant $\{a,b\}$. On a :
+$$P(G;\lambda)=P(\tilde G;\lambda)+P(\bar G;\lambda)$$
+\end{prop}
+
+\begin{corollaire}
+Si $G$ est un graphe d'ordre $n$, la fonction $P(G;\lambda)$ est un polynôme de degré $n$
+en $\lambda$ ; en outre, le terme en $\lambda^n$ a pour coefficient 1 et le terme
+constant est nul.
+\end{corollaire}
+\setcounter{corollaire}{0}
+
+
+\begin{prop}
+Si un graphe $G$ admet $p$ composantes connexes $H_1,\dots,H_p$, on a :
+$$P(G;\lambda)=\prod_{i=1}^p P(H_i;\lambda)$$
+\end{prop}
+
+\begin{prop}
+Si un graphe $G$ admet un ensemble d'articulations $A$ qui est une $k$-clique,
+avec $q$ pièces $H_1,\dots,H_q$ relativement à $A$, alors :
+$$P(G,\lambda)=([\lambda]_k)^{1-q}\prod_{i=1}^q P(H_i;\lambda)$$
+\end{prop}
+
+\begin{theorem}
+Les coefficients de $P(G;\lambda)$ sont alternativement $\geq 0$ et $\leq 0$.
+\end{theorem}
+
+\begin{corollaire}
+Si $G$ est un graphe d'ordre $n$ avec $m$ arêtes, le coefficient de
+$\lambda^{n-1}$ est $-m$.
+\end{corollaire}
+
+\begin{theorem}
+Un graphe $G$ d'ordre $n$ est un arbre si et seulement si $P(G;\lambda)=\lambda(\lambda-1)^{n-1}$
+\end{theorem}
+
+\subsubsection{Coloration de graphes planaires}
+Résultats :
+\begin{enumerate}
+ \item Un graphe planaire qui ne contient pas quatre cycles de longueur 3 est coloriable avec 3 couleurs (Grünbaum, 1963).
+ \item Un graphe planaire sans cycles de longueur 3 est coloriable avec 3 couleurs (Grötzsch, 1958).
+\end{enumerate}
+
+\begin{theorem}
+Si $G$ est un graphe planaire, alors $\chi(G)\leq 5$.
+\end{theorem}
+
+\begin{theorem}[des quatre couleurs]
+Si $G$ est un graphe planaire, alors $\chi(G)\leq 4$.
+\end{theorem}
+
+\begin{theorem}
+Si $G$ est un graphe simple planaire à faces triangulaires et si les degrés sont tous des multiples de 2
+(ou tous des multiples de 3), alors $\chi(G)\leq 4$.
+\end{theorem}
+
+\subsection{Étude spécifique}
+Référence : cf \cite{jensen1996graph}\\
+$G=(V,E)$
+
+\begin{theorem}[Hajnal, Szemerédi, 1970]
+A graph $G$ may be colored by $\Delta(G)+1$ colors s.t. for any 2 colors i and j, where
+$1 \leq i \leq j \leq \Delta (G) + 1$, the numbers of vertices of color $i$ and color $j$
+differ by at most one.
+\end{theorem}
+
+\begin{theorem}[König, {[1916,1936]}]
+Un graphe est 2-colorable ssi il n'admet pas de cycle impair.
+\end{theorem}
+
+\begin{theorem}[Dirac, {[1957]}]
+Soit $G$ un graphe k-critique. Si $k \geq 4$ et $G \neq K_k$, alors :
+$$2|E(G)| \geq (k-1)|V(G)|+(k-3)$$
+\end{theorem}
+
+\textbf{Le nombre chromatique d'un graphe parfait peut être calculé en temps polynomial
+(Grötschel, Lov\'{a}sz, Schrijver, 1981).}\\
+MAIS :\\
+EST\_PARFAIT \textit{\textbf{co-NP}}
+
+\begin{theorem}[Perfect Graph Theorem. {[Lovász, 1972]}]
+A graph is perfect if and only if its complement is perfect.
+\end{theorem}
+
+\begin{defin}
+An induced cycle of odd length at least 5 is called an \textbf{odd hole}. An induced subgraph that is the complement of
+an odd hole is called an \textbf{odd antihole}. A graph that does
+not contain any odd holes or odd antiholes is called a \textbf{Berge graph}.
+\end{defin}
+
+\begin{theorem}[Strong Perfect Graph Theorem. {[Maria Chudnovsky, Neil Robertson, Paul D. Seymour, Robin Thomas]}]
+A graph is perfect if and only if it is a Berge graph (i.e. ni lui ni son complémentaire
+ne contiennent de cycle impair induit de longueur au moins cinq).
+\end{theorem}
+
+\begin{theorem}[Minty, 1962]
+A graph $G$ is $k$-colorable if and only if $G$ has an orientation in which the flow ratio of any cycle $C$ (i.e.
+the maximum of $m/n$ and $n/m$, where $n$ is the number of edges of $C$ pointing in one direction and $m$
+is the number of edges of $C$ pointing in the opposite direction is at most $k-1$.
+\end{theorem}
+
+\begin{theorem}[Roy {[1967]}, Gallai {[1968]}]
+A graph $G$ is $k$-colorable if and only if $G$ has an orientation in which the length of every directed path is
+at most $k-1$.
+\end{theorem}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

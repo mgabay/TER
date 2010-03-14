@@ -1,0 +1,56 @@
+\input{dirs}
+
+\documentclass[a4paper,12pt]{article}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+ 
+\usepackage{graphicx}
+%\usepackage{fancybox, fancyhdr}
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+\usepackage{chngpage}
+\usepackage{listings}
+
+%\pagestyle{fancy}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+% début du document --------------------------
+
+\begin{document}
+\renewcommand{\chaptername}{Section} % renome Chapitre en Section
+
+% titre ------------------------------
+
+\include{Titre/protocole}
+
+% tables ------------------------------
+
+% \setcounter{page}{1}
+% \pagenumbering{roman}
+% \tableofcontents
+% \newpage
+% \listoffigures
+% \newpage
+% \listoftables
+% \newpage
+% \pagenumbering{arabic}
+% \setcounter{page}{1}
+
+% contenu ------------------------------
+
+\include{Protocole/protocole}
+
+
+% Annexes ----------------------------------------
+
+% \appendix
+% \include{append1} => premiere annexe
+
+
+% Bibliographie ----------------------------------
+% \nocite{*}
+% \bibliographystyle{unsrt}
+% \bibliography{biblio}
+
+\end{document}

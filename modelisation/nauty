@@ -1,0 +1,34 @@
+GENG :
+  ./geng
+  Options :
+    -c : que les graphs connexes
+    -dxDY : chaque sommet est de degré >= x et <= Y
+
+LISTG / SHOWG :
+  ./listg | ./showg
+  Options :
+    -A affiche la matrice d'adjacence avec des espaces (-a sans)
+    -t n'affiche que la partie triangulaire supérieure
+
+PICKG :
+  Choisis un graph selon ses propriétés
+
+
+ex :
+Graph6 format + uppermat :
+./geng -g -h 5 | ./showg -t -A
+
+Graphes connexes à 6 sommets de degré maximum 5 :
+./geng -c 6 | ./pickg -D5 | ./listg -W
+
+Kn (x = n(n-1)/2) :
+geng -c -dn-1Dn-1 n | listg -W
+geng -c n x:x | listg -W
+
+Sous scilab :
+m = ones(n, n) - eye(n,n)
+//row = '['; for i = 1:n, row = row + '%f ', end; row = row + ']';
+fprintfMat('Imag/TER/modelisation/graphes_complets/_Kn',m, '%0.f')
+sed -i 's/^/\[ /' _Kn
+sed 's/$/]/' -i _Kn
+echo "V=n; d=n-1; m=[" > Kn ; cat _Kn >> Kn ; echo "];" >> Kn

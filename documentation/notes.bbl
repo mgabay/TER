@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{berge-graphes}
+C.~Berge.
+\newblock {\em Graphes et hypergraphes}.
+\newblock Dunod, Paris, 1970.
+
+\bibitem{berge-arretes}
+C.~Berge.
+\newblock {\em Graphes et hypergraphes}, chapter 12. Indice chromatique, pages
+  236--259.
+\newblock Dunod, Paris, 1970.
+
+\bibitem{berge-sommets}
+C.~Berge.
+\newblock {\em Graphes et hypergraphes}, chapter 15. Nombre chromatique, pages
+  314--346.
+\newblock Dunod, Paris, 1970.
+
+\bibitem{jensen1996graph}
+T.R. Jensen and B.~Toft.
+\newblock {Graph coloring problems}.
+\newblock {\em Bull. Amer. Math. Soc. 33 (1996), 287-288. DOI:
+  10.1090/S0273-0979-96-00651-9 PII: S 0273-0979 (96) 00651-9 Copyright of
+  article: Copyright 1996, American Mathematical Society}, 1996.
+
+\end{thebibliography}

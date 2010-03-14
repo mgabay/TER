@@ -1,0 +1,94 @@
+\section{Généralités}
+L'objectif de ce document est de décrire la démarche que
+je vais suivre au long du TER.\\
+
+On se place dans un multigraphe $G=(V,E)$. Pour le problème de coloration des
+arrêtes, on considérera $G$ sans boucles (s'il y a une boucle, l'arrête est
+adjacentes avec elle-même et n'admet donc pas de bonne coloration) et dans le
+cas de la coloration des sommets, on pourra considérer que $G$ est un graphe simple
+(la multiplicité d'une paire de sommets quelconques ne change rien à la coloration).
+On pourra également restreindre l'étude aux graphes à une composante connexe car
+l'identification des composantes connexes se fait en $O(|V| + |E|)$ et le problème est
+ensuite facilement parallélisable.\\
+
+Il existe deux types de colorations différentes : la coloration des arrêtes et la
+coloration des sommets.\\
+Je me propose donc d'étudier dans un premier temps la coloration des sommets et
+d'essayer ensuite de ramener le problème de coloration des arrêtes à un problème
+de coloration des sommets.
+
+\section{État de l'art}
+La première partie de l'étude consistera à étudier l'état
+de l'art en matière de coloration de graphes.\\
+Lors de cette étude, je m'intéresserai dans un premier temps à
+l'étude théorique et à des résultats généraux puis je rechercherai
+les algorithmes existants.\\
+
+J'essaierai également d'intuiter quelques
+pistes d'algorithmes et de les décrire ou les écrire en pseudo-code.
+
+\section{Coloration des sommets}
+
+\subsection{Formulation du problème}
+Formuler le problème : réfléchir aux différentes modélisations possibles.\\
+Formuler en PLNE et éventuellement autrement.
+
+\subsection{Résolution par PLNE}
+Il s'agira ici de résoudre les problèmes de coloration par PLNE grâce à
+des logiciels disponibles.
+
+% \subsection{Autres méthodes exactes / Heuristiques}
+% Il est difficile de savoir à quoi s'attendre en temps de
+% calcul pour l'exécution d'un algorithme. Afin de pouvoir
+% me donner une ``borne inf'' du temps de calcul nécessaire pour
+% l'exécution d'un algorithme, je pense commencer
+% par implémenter un algorithme approché intéressant. Ceci devra me permettre
+% de comparer l'efficacité des algorithmes et d'éviter de lancer un calcul exact
+% sur une instance pour laquelle un algorithme approché met déjà beaucoup de temps.
+
+\subsection{Algorithmes}
+S'il peut-être intéressant de résoudre le problème autrement que par PLNE,
+il s'agira d'implémenter (ou éventuellement d'utiliser des
+API disponibles) et de benchmarker des algorithmes exacts permettant
+de colorer les sommets d'un graphe avec un nombre de couleur minimal (égal au nombre
+chromatique $\chi (G)$).\\
+Si le temps le permet, je m'interesserai ensuite à des heuristiques.\\
+
+Pour chaque algorithme j'adopterai la démarche suivante :
+\begin{enumerate}
+ \item Écrire l'algorithme en pseudo-code
+ \item Étude préliminaire : réfléchir aux propriétés de l'algorithme :
+       dans quelles instances sera-t-il
+       le plus/le moins efficace, complexité, stabilité, à quel comportement s'attendre ?
+       l'algorithme est-il garantit ?...
+ \item Implémentation
+ \item \label{bench} Benchmark
+ \item Questionnement / Analyse des problèmes : les résultats correspondent-ils
+       à ceux attendus ? si non pourquoi ?
+       le temps d'exécution est-il satisfaisant ? peut-on l'améliorer ?
+ \item Amélioration, optimisation
+ \item fin ou retour en \ref{bench} si l'algorithme a été amélioré
+\end{enumerate}
+
+Je m'attacherai lors de cette partie à regarder quels algorithmes sont effectifs dans quels graphes
+et s'il est intéressant de rechercher des propriétés du graphe (recherche qui peut être coûteuse)
+afin de déterminer quel algorithme lancer ou de faciliter l'exécution d'un algorithme.\\
+
+Pour ce qui est des benchmarks, je commencerai par exécuter les algorithmes sur de petites instances
+afin de pouvoir vérifier à la main la bonne coloration. Je les exécuterai ensuite sur des instances de
+plus grande tailles pour effectuer des tests de performances (et j'implémenterai probablement un
+algorithme pour vérifier que la coloration est bonne au niveau du nombre de couleurs comme au niveau
+des adjacences).
+
+\section{Application des méthodes de coloration des sommets aux arrêtes}
+Je rechercherai comment appliquer les méthodes de coloration des sommets à la coloration des arrêtes.\\
+
+Idées : graphes de lignes, matrice d'adjacence...
+
+\section{Pour aller plus loin...}
+Si le temps le permet je pourrais envisager d'autres approches du problème et suivre d'autres pistes
+telles que la parallélisation (est-ce possible, si oui le faire), l'écriture d'algorithmes probabilistes,
+la réécriture d'un algorithme dans un autre langage de programmation...\\
+D'autres idées viendront probablement étoffer cette partie au cours du TER. 
+
+\end{document}

@@ -1,0 +1,24 @@
+@book{berge-graphes,
+  title={Graphes et hypergraphes},
+  author={Berge, C.},
+  publisher={Dunod, Paris},
+  year={1970}
+}
+
+@inbook{berge-arretes,
+  title={Graphes et hypergraphes},
+  author={Berge, C.},
+  publisher={Dunod, Paris},
+  year={1970},
+  chapter={12. Indice chromatique},
+  pages={236-259}
+}
+
+@inbook{berge-sommets,
+  title={Graphes et hypergraphes},
+  author={Berge, C.},
+  publisher={Dunod, Paris},
+  year={1970},
+  chapter={15. Nombre chromatique},
+  pages={314-346}
+}

@@ -1,0 +1,22 @@
+
+<<< initial
+
+
+<<< generate model
+
+Presolve has eliminated 1006998 rows and 3001 columns...
+Presolve has improved bounds 1998 times...
+Presolve has eliminated 1006998 rows and 3001 columns...
+Presolve has improved bounds 1998 times...
+Presolve has eliminated 1006998 rows and 3001 columns...
+Presolve has improved bounds 1998 times...
+Tried aggregator 1 time.
+MIP Presolve eliminated 1006998 rows and 3001 columns.
+MIP Presolve modified 2991006 coefficients.
+Reduced MIP has 1994004 rows, 998001 columns, and 5982012 nonzeros.
+Presolve time =   29.08 sec.
+Clique table members: 12471.
+MIP emphasis: balance optimality and feasibility.
+real70m8.080s
+user68m28.771s
+sys0m27.485s
