@@ -1,20 +1,16 @@
-CC=g++
-LDFLAGS=
-CFLAGS=-O3 -D NDEBUG
+all: exe tests
 
-SRC= $(wildcard *.cpp)
-OBJ= $(SRC:.cpp=.o)
+exe:
+	(cd src; make; cd ..)
 
+exe_debug:
+	(cd src; make debug; cd ..)
 
-all: $(OBJ)
+tests: exe_debug
+	(cd tests; make; cd ..)
 
-debug: CFLAGS=-g
-debug: $(OBJ)
+debug: exe_debug tests
 
-%.o: %.cpp
-	$(CC) -o $@ -c $< $(CFLAGS)
-
-
-clean:
-	rm -f *.o
-
+clean :
+	(cd src; make clean; cd ..)
+	(cd tests; make clean; cd ..)
