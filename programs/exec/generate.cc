@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
         ofstream file;
         file.open(argv[4]);
         write_graphviz(file, g);
-        file << "hkjhkjhkkjhk";
         file << flush;
         file.close();
     }

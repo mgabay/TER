@@ -2,6 +2,7 @@ all: exe tests
 
 exe:
 	(cd src; make; cd ..)
+	(cd exec; make; cd ..)
 
 exe_debug:
 	(cd src; make debug; cd ..)
