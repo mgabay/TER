@@ -1,8 +1,8 @@
-#include "../src/graphs.h"
-#include <boost/graph/graphviz.hpp>
+#include "../src/graph.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <string.h>
 
 using namespace std;
 
@@ -26,14 +26,16 @@ int main(int argc, char* argv[]) {
     vertices = atoi(argv[1]);
     edges = atoi(argv[2]);
 
-    g = (Graph) generate_random_graph(vertices, edges);
+    g.random_graph(vertices, edges);
 
     if ( argc > 4 && !strcmp(argv[3],"-dot")) {
         ofstream file;
         file.open(argv[4]);
-        write_graphviz(file, g);
+        g.graphviz(file);
         file << flush;
         file.close();
     }
+
+    g.print_model();
     return 0;
 }
