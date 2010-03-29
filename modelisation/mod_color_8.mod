@@ -3,8 +3,15 @@ range sommets = 1..V;
 int m[sommets][sommets] = ...; // Matrice d'adjacence
 int d; // Degré du graphe
 int d2;
+int n_arretes = 0; // le nombre d'arrêtes du graphe simple correspondant
 
-execute max_degree {
+// Pour compiler le modele
+/*execute CPX_PARAM {
+    cplex.preInd = 0;
+    cplex.TiLim = 0;
+}*/
+
+execute max_degree_n_arretes {
     d = 0;
     for ( var i in sommets ) {
         d2 = 0;
@@ -15,10 +22,17 @@ execute max_degree {
     }
     d2 = d + 1;
     writeln("\n\nLe degré maximum du graphe est : ", d);
+
+    for ( i in sommets ) {
+        for ( j in sommets ) {
+            if ( m[i][j] != 0 )
+                n_arretes++;
+        }
+    }
+    n_arretes /= 2;
+    writeln("\n\nLe nombre d'arrètes du graphe simple correspondant est : ", n_arretes);
 }
 
-//int d2 = d+1;
-int n_arretes = ( sum(i in sommets) sum(j in i..V) m[i][j] ); // le nombre d'arrêtes du graphe
 float chi_min = V^2 / (V^2 - 2*n_arretes); // Un minorant du nombre chromatique
 
 dvar int+ z; // Nombre chromatique

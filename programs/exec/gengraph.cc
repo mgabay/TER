@@ -8,7 +8,7 @@ using namespace std;
 
 void usage(){
     cout << endl << "Gengraph -- usage :" << endl << endl;
-    cout << "        gengraph num_vertices num_edges [-dot file]" << endl << endl;
+    cout << "        generate num_vertices num_edges [-dot file]" << endl << endl;
     cout << "num_vertices : number of vertices" << endl;
     cout << "num_edges    : number of edges" << endl;
     cout << "-dot file    : generates graphviz formatted graph in the specified file" << endl;

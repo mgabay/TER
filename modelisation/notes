@@ -32,3 +32,10 @@ fprintfMat('Imag/TER/modelisation/graphes_complets/_Kn',m, '%0.f')
 sed -i 's/^/\[ /' _Kn
 sed 's/$/]/' -i _Kn
 echo "V=n; d=n-1; m=[" > Kn ; cat _Kn >> Kn ; echo "];" >> Kn
+
+
+Rendre CPLEX usable :
+oplrun -e g80-500.lp mod_color_8.mod graphes/g80-500
+
+cplex < exec_cplex > out
+

@@ -20,6 +20,9 @@ class Graph {
         /// Copy constructor
         Graph(const Graph& g);
 
+        /// Constructor from a dimacs file
+        Graph(char* file_);
+
         /** Greedy : generates a random connected multigraph with specified
          * number of vertices and at least the specified number of edges
          * \param num_edges number of edges
