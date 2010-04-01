@@ -20,7 +20,7 @@ class Graph {
         /// Copy constructor
         Graph(const Graph& g);
 
-        /// Constructor from a dimacs file
+        /// Constructor from a preformated dimacs file
         Graph(char* file_);
 
         /** Greedy : generates a random connected multigraph with specified
@@ -36,7 +36,23 @@ class Graph {
 
         /** Prints the adjacency matrix on the standard output */
         void print_matrix() const;
+
+        /** \return the number of vertices of the graphs */
+        int get_nvertices() const;
         
+        /** A heuritic that try to find a maximum clique 
+         * \return the clique found in a vector
+         * */
+        std::vector<int>& clique() const; 
+       
+        /** Finds the maximum clique using clique() and renumber
+         * the clique vertices s.t. vertices 0..sizeof(clique)-1
+         * corresponds to the clique vertices
+         * \return the size of the maximum clique found
+         */
+        int clique_renumbered(); 
+        
+
         /** \return the adjacency matrix corresponding to the graph */
         Matrix& adjacency_matrix() const;
 

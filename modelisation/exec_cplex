@@ -1,0 +1,4 @@
+read g80-500.lp
+optimize
+display solution variables z
+display solution variables c(*)

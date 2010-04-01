@@ -10,7 +10,7 @@ EXEC= $(SRC:.cc=.exe)
 
 all: $(EXEC)
 
-%.exe: %.o
+%.exe: %.o $(OBJ2)
 	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@ $(OBJ2) $(CFLAGS)
 
 

@@ -2,12 +2,12 @@
 #include <boost/graph/make_connected.hpp>
 #include <boost/graph/adjacency_iterator.hpp>
 #include <boost/graph/graphviz.hpp>
-#include <boost/graph/read_dimacs.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "graph.h"
 
 using namespace std;
@@ -16,38 +16,6 @@ using namespace boost;
 Graph::Graph():g_(new Graphe()) {}
 
 Graph::Graph(const Graph& g):g_(new Graphe(*(g.g_))) {}
-
-/*Graph::Graph(char* file) {
-    typedef adjacency_list < vecS, vecS, directedS,
-            no_property,
-            property <edge_capacity_t, long,
-            property <edge_reverse_t,
-            adjacency_list_traits <vecS, vecS, directedS>::edge_descriptor> > > Graphy;
-
-    graph_traits<Graphy>::vertex_descriptor s,t;
-
-    Graphy g;
-
-    property_map < Graphy, edge_capacity_t >::type capacity = get(edge_capacity, g);
-    property_map < Graphy, edge_reverse_t >::type rev = get(edge_reverse, g);
-
-    ifstream file_ (file, ios::in);
-    read_dimacs_max_flow(g, capacity, rev, s, t, file_);
-
-    graph_traits<Graphy>::adjacency_iterator deb, fin, cour;
-    //graph_traits<Graphe>::adjacency_iterator deby, finy, coury;
-
-    int v = num_vertices(g);
-    g_ = new Graphe(v);
-
-    for (int i = 0; i < v ; i++) {
-        tie(deb,fin) = adjacent_vertices(i, g);
-        for(cour = deb ; cour != fin ; ++cour){
-            if (*cour >= i)
-                add_edge(i, *cour, *g_);
-        }
-    }
-}*/
 
 // The file structure must be :
 // p [vertices] [edges] e ... e ... e x y[\n]EOF
@@ -122,4 +90,115 @@ Graph& Graph::random_graph(int num_vertices, int num_edges){
 
 void Graph::graphviz(ostream& out) const {
     write_graphviz(out,*g_);
+}
+
+int Graph::get_nvertices() const {
+    return num_vertices(*g_);
+}
+
+struct elt {
+    int v; // vertex descriptor
+    int d; // degree
+    bool operator== (int j) { return v == j; }
+
+    elt(int i, int j): v(i), d(j) { }
+};
+
+bool compare (elt i, elt j) { return i.d > j.d; }
+
+vector<int>& Graph::clique() const {
+    graph_traits<Graphe>::adjacency_iterator deb, fin;
+    vector<int> *vec = new vector<int>();
+    vector<elt> eligible;
+    elt* el;
+    bool ok;
+    vector<elt>::iterator beg, end;
+    vector<int>::iterator ibeg, iend;
+    int max_degree = -1, max_node = 0, d;
+    const int v = num_vertices(*g_);
+
+    // Find max-degree vertice
+    for(int i = 0; i < v; i++) {
+        d = out_degree(i, *g_);
+        if ( d > max_degree ) {
+            max_degree = out_degree(i, *g_);
+            max_node = i;
+        }
+    }
+    vec->push_back(max_node);
+
+    tie(deb,fin) = adjacent_vertices(max_node, *g_);
+    for( ; deb != fin ; ++deb){
+        beg = eligible.begin();
+        end = eligible.end();
+        if ( find (beg, end, *deb) == end ) {
+            el = new elt(*deb, out_degree(*deb, *g_));
+            eligible.push_back(*el);
+            delete el;
+        }
+    }
+    // sort by maximum degree (highest first)
+    sort(eligible.begin(), eligible.end(), compare);
+
+    beg = eligible.begin();
+    end = eligible.end();
+    for ( ; beg != end ; ++beg ) {
+        ok = true;
+        tie(deb,fin) = adjacent_vertices(beg->v, *g_);
+        iend = vec->end();
+        for ( ibeg = vec->begin(); ibeg != iend; ++ibeg ) {
+            if ( find (deb, fin, *ibeg) == fin ) {
+                ok = false;
+                break;
+            }
+        }
+        if ( !ok )
+            continue;
+        vec->push_back(beg->v);
+    }
+
+    
+    return *vec;
+}
+
+int Graph::clique_renumbered() {
+    graph_traits<Graphe>::adjacency_iterator deb, fin;
+    vector<int>::iterator ibeg, iend;
+    vector<int>* mclique = &clique();
+    int desc, adj, index = 0, i;
+
+    // sort the clique components by ascendind order
+    sort(mclique->begin(), mclique->end());
+    iend = mclique->end();
+    for ( ibeg = mclique->begin(); ibeg != iend; ++ibeg ) {
+        adj = 0;
+        desc = add_vertex(*g_);
+        tie(deb,fin) = adjacent_vertices(*ibeg, *g_);
+        for ( ; deb != fin ; ++deb) {
+            if (*deb == index)
+                ++adj;
+            else
+                add_edge (desc, *deb, *g_);
+        }
+        clear_vertex(*ibeg, *g_);
+
+        tie(deb,fin) = adjacent_vertices(index, *g_);
+        for ( ; deb != fin ; ++deb) {
+                add_edge (*ibeg, *deb, *g_);
+        }
+        clear_vertex(index, *g_);
+        for ( i = 0 ; i < adj ; ++i )
+            add_edge (index, *ibeg, *g_);
+
+        tie(deb,fin) = adjacent_vertices(desc, *g_);
+        for ( ; deb != fin ; ++deb) {
+                add_edge (index, *deb, *g_);
+        }
+
+        clear_vertex(desc, *g_);
+        remove_vertex(desc, *g_);
+        index++;
+    }
+
+    return index;
 }

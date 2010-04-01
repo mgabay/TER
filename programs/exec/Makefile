@@ -13,7 +13,7 @@ all: $(EXEC)
 %.o: %.cc
 	$(CC) -o $@ -c $< $(CFLAGS)
 
-%.exe: %.o
+%.exe: %.o $(OBJ2)
 	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@ $(OBJ2) $(CFLAGS)
 
 
