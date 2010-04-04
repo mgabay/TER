@@ -1,0 +1,17 @@
+
+<<< initial
+
+
+
+Le degré maximum du graphe est : 28
+
+<<< generate model
+
+Column 'z' set to infinite lower bound.
+Presolve time =    0.00 sec.
+
+<<< no solution
+
+
+<<< done
+

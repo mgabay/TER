@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include "graph.h"
 
@@ -20,8 +21,9 @@ Graph::Graph(const Graph& g):g_(new Graphe(*(g.g_))) {}
 // The file structure must be :
 // p [vertices] [edges] e ... e ... e x y[\n]EOF
 Graph::Graph(char* file_) {
-    int v, e;
-    string s;
+    int v, d;
+    string str, s;
+    stringstream stream;
 
     // Open the file
     ifstream file;
@@ -32,24 +34,48 @@ Graph::Graph(char* file_) {
         exit(1);
     }
 
-    file.get();
-    file >> v;
-    file >> e;
-    g_ = new Graphe (v);
-    file.get();
+    while(getline(file, str)) {
+        if (str[0] == 'p')
+            break;
+    }
 
-    while(file.get() != -1) {
-        file >> v;
-        file >> e;
-        add_edge(v-1, e-1, *g_);
-        file.get();
+    s = str.substr(2,4);
+    if (str.length() < 8 || str[0] != 'p' || s.compare("edge")) {
+        cerr << "The graph caractéristics are not specified (p edge x y)" << endl;
+        exit(1);
+    }
+
+    s = str.substr(7, str.length());
+    cout << " s = " << s << endl;
+    stream << s;
+    stream >> v;
+    stream.str("");
+    stream.clear();
+    cout << " v = " << v << endl;
+
+    g_ = new Graphe (v);
+
+    while(getline(file, str)) {
+        if (str[0] != 'e')
+            continue;
+        s = str.substr(2, str.length());//str.length()-3);
+        cout << " s = " << s << endl;
+        stream << s;
+        stream >> v;
+        cout << " v = " << v << endl;
+        stream >> d;
+        cout << " d = " << d << endl << endl;
+        stream.str("");
+        stream.clear();
+        add_edge(v-1, d-1, *g_);
     }
 
     file.close();
 }
 
-void Graph::print_model() const {
+void Graph::print_model() {
     cout << "V = " << num_vertices(*g_) << ";" << endl;
+    cout << "clique = " << clique_renumbered() << ";" << endl;
     cout << "m = ";
     print_matrix();
     cout << ";" << endl;
