@@ -46,12 +46,10 @@ Graph::Graph(char* file_) {
     }
 
     s = str.substr(7, str.length());
-    cout << " s = " << s << endl;
     stream << s;
     stream >> v;
     stream.str("");
     stream.clear();
-    cout << " v = " << v << endl;
 
     g_ = new Graphe (v);
 
@@ -59,12 +57,9 @@ Graph::Graph(char* file_) {
         if (str[0] != 'e')
             continue;
         s = str.substr(2, str.length());//str.length()-3);
-        cout << " s = " << s << endl;
         stream << s;
         stream >> v;
-        cout << " v = " << v << endl;
         stream >> d;
-        cout << " d = " << d << endl << endl;
         stream.str("");
         stream.clear();
         add_edge(v-1, d-1, *g_);
