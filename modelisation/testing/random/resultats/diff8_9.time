@@ -1,0 +1,99 @@
+Diff de 10_100.dat.time
+2,4c2,4
+< real	0m0.190s
+< user	0m0.045s
+< sys	0m0.022s
+---
+> real	0m0.180s
+> user	0m0.050s
+> sys	0m0.034s
+Diff de 10_30.dat.time
+2,4c2,4
+< real	0m0.280s
+< user	0m0.046s
+< sys	0m0.018s
+---
+> real	0m0.095s
+> user	0m0.038s
+> sys	0m0.022s
+Diff de 10_50.dat.time
+2,4c2,4
+< real	0m0.110s
+< user	0m0.044s
+< sys	0m0.018s
+---
+> real	0m0.259s
+> user	0m0.036s
+> sys	0m0.033s
+Diff de 20_100.dat.time
+2,4c2,4
+< real	0m0.197s
+< user	0m0.071s
+< sys	0m0.029s
+---
+> real	0m0.323s
+> user	0m0.075s
+> sys	0m0.028s
+Diff de 20_200.dat.time
+2,4c2,4
+< real	0m0.309s
+< user	0m0.092s
+< sys	0m0.032s
+---
+> real	0m0.231s
+> user	0m0.097s
+> sys	0m0.026s
+Diff de 20_50.dat.time
+2,4c2,4
+< real	0m0.158s
+< user	0m0.054s
+< sys	0m0.024s
+---
+> real	0m0.131s
+> user	0m0.052s
+> sys	0m0.031s
+Diff de 30_100.dat.time
+2,4c2,4
+< real	0m0.214s
+< user	0m0.140s
+< sys	0m0.032s
+---
+> real	0m0.377s
+> user	0m0.152s
+> sys	0m0.029s
+Diff de 30_200.dat.time
+2,4c2,4
+< real	0m0.357s
+< user	0m0.252s
+< sys	0m0.035s
+---
+> real	0m0.392s
+> user	0m0.249s
+> sys	0m0.034s
+Diff de 30_300.dat.time
+2,4c2,4
+< real	0m0.364s
+< user	0m0.240s
+< sys	0m0.027s
+---
+> real	0m0.324s
+> user	0m0.239s
+> sys	0m0.036s
+Diff de 30_500.dat.time
+2,4c2,4
+< real	0m0.723s
+< user	0m0.611s
+< sys	0m0.034s
+---
+> real	0m0.839s
+> user	0m0.596s
+> sys	0m0.039s
+Diff de 50_500.dat.time
+2,4c2,4
+< real	0m4.844s
+< user	0m4.557s
+< sys	0m0.076s
+---
+> real	0m4.752s
+> user	0m4.539s
+> sys	0m0.078s

@@ -36,6 +36,6 @@ int main(int argc, char* argv[]) {
         file.close();
     }
 
-    g.print_model();
+    g.print_model(true);
     return 0;
 }

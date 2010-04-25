@@ -7,6 +7,7 @@ int V = ...; // Nombre de sommets
 int d = ...; // Degré du graphe
 range sommets = 1..V;
 int m[sommets][sommets] = ...; // Matrice d'adjacence
+int clique = ...;
 
 dvar int+ z; // Nombre chromatique
 dvar int y[sommets][sommets] in 0..1; // Contraintes actives

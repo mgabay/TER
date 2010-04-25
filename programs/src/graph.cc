@@ -68,9 +68,12 @@ Graph::Graph(char* file_) {
     file.close();
 }
 
-void Graph::print_model() {
+void Graph::print_model(bool renumbered) {
     cout << "V = " << num_vertices(*g_) << ";" << endl;
-    cout << "clique = " << clique_renumbered() << ";" << endl;
+    if (renumbered)
+        cout << "clique = " << clique_renumbered() << ";" << endl;
+    else 
+        cout << "clique = 1;" << endl;
     cout << "m = ";
     print_matrix();
     cout << ";" << endl;

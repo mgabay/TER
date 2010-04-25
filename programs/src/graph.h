@@ -32,7 +32,7 @@ class Graph {
         Graph& random_graph(int num_edges, int num_vertices);
 
         /** Prints the graph so that it fits the opl model */
-        void print_model();
+        void print_model(bool renumbered);
 
         /** Prints the adjacency matrix on the standard output */
         void print_matrix() const;

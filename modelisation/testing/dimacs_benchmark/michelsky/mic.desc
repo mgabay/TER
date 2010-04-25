@@ -1,0 +1,8 @@
+#  myciel3.col  (11,20), 4, MYC
+# myciel4.col (23,71), 5, MYC
+# myciel5.col (47,236), 6, MYC
+# myciel6.col (95,755), 7, MYC
+# myciel7.col (191,2360), 8, MYC 
+
+MYC: (From Michael Trick (trick@cmu.edu)) Graphs based on the Mycielski transformation. These graphs are difficult to solve because they are triangle free (clique number 2) but the coloring number increases in problem size.
+
