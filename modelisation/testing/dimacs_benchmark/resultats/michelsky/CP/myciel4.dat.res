@@ -26,8 +26,8 @@ Le nombre d'arrètes du graphe simple correspondant est : 71
  ! Number of branches     : 1 598
  ! Number of fails        : 813
  ! Total memory usage     : 1,0 Mb (0,7 Mb CP Optimizer + 0,4 Mb Concert)
- ! Time spent in solve    : 0,02s (0,02s engine + 0,00s extraction)
- ! Search speed (br. / s) : 79 900,0
+ ! Time spent in solve    : 0,03s (0,03s engine + 0,00s extraction)
+ ! Search speed (br. / s) : 53 266,7
  ! ----------------------------------------------------------------------------
 
 <<< solve

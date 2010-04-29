@@ -20,14 +20,14 @@ Le nombre d'arrètes du graphe simple correspondant est : 100
  ! ----------------------------------------------------------------------------
  !   Branches  Non-fixed                Branch decision                   Best
  *         58      0,00s                         -                           5
- *         81      0,00s                  c(11)  =    1                      4
+ *         81      0,01s                  c(11)  =    1                      4
  ! Search terminated, replaying optimal solution
  ! ----------------------------------------------------------------------------
  ! Solution status        : Terminated normally, optimal found (tol. = 0)
  ! Number of branches     : 81
  ! Number of fails        : 21
  ! Total memory usage     : 1,1 Mb (0,7 Mb CP Optimizer + 0,4 Mb Concert)
- ! Time spent in solve    : 0,00s (0,00s engine + 0,00s extraction)
+ ! Time spent in solve    : 0,01s (0,01s engine + 0,00s extraction)
  ! Search speed (br. / s) : 8 100,0
  ! ----------------------------------------------------------------------------
 

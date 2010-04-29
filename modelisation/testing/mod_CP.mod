@@ -19,7 +19,7 @@ execute max_degree_n_arretes {
     for ( var i in sommets ) {
         d2 = 0;
         for ( var j in sommets )
-            d2 = d2 + m[i][j];
+            d2++;
         if ( d2 > d )
             d = d2;
     }
