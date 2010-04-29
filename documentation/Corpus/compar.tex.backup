@@ -1,0 +1,144 @@
+\section{Intoduction}
+Ce document est un bref résumé des mes impressions sur les logiciels
+et API utilisés au cours de mon TER.\\
+
+
+\section{Produits IBM - ILOG}
+\verb?ILOG? (qui a été racheté par \verb?IBM?) propose des solveurs
+très puissants pour la programmation par contrainte et
+la programmation linéaire en nombres entiers.\\
+En tant qu'académique vous pouvez accéder gratuitement à tous leurs produits.
+La page web du programme d'\verb?IBM? est \url{https://www.ibm.com/developerworks/university/}
+et les logiciels sont accessibles à partir de
+\url{https://www.ibm.com/developerworks/university/software/get_software.html}.\\
+
+Tous les logiciels d'\verb?IBM? sont fournis avec des interfaces permettant de les
+utiliser directement dans des programmes en \verb?C++? ou en \verb?Java?.
+Ils sont également disponibles et optimisés pour de très nombreuses architectures de machines.
+
+\subsection{CPLEX}
+\verb?CPLEX? est un solveur permettant de résoudre des programmes linéaires en nombres entiers.
+Il est très puissants et relativement rapide à prendre en main dans son fonctionnement de base.
+Toutefois, il dispose de (très) nombreuses options.\\
+Je pense que sa puissance réside
+également dans ses options mais je n'ai utilisé pour le TER que le ``minimum vital'' de ce point de vue.
+Une lecture approfondie du manuel pourra se révéler très interessante pour comprendre celles-ci
+ainsi que le fonctionnement interne du solveur.\\
+
+Il est assez difficile d'estimer le temps nécessaire à la résolution d'un problème par \verb?CPLEX? ;
+en particulier car le solveur peut passer une très grande partie du temps de calcul à prouver une solution
+trouvée très rapidement.
+\verb?CPLEX? se comporte également parfois de manière obscure (une contrainte spécifié avant ou après une autre peut
+radicalement changer le temps de calcul).\\\\
+J'ai utilisé les versions \verb?10? et \verb?12? du logiciel et j'ai remarqué des différences notables :
+\begin{itemize}
+ \item J'ai constaté une nette amélioration générale des performances dans \verb?CPLEX? \verb?12?.
+ \item \verb?CPLEX? \verb?12? semble prouver beaucoup plus vite les solutions.
+ \item La gestion des contraintes a également, à mon avis, radicalement changé entre ces deux versions :
+    j'ai constaté ce changement en résolvant plusieurs problèmes avec deux modèles différents - l'un
+    correspondant au deuxième dans lequel on a dupliqué une contrainte pour la spécifier explicitement.
+    Lors de la résolution par \verb?CPLEX? \verb?10?, les deux modèles étaient équivalents (même temps de calcul,
+    même nombre de noeuds explorés, comptés, restants...) alors que dans la version \verb?12? on observe une différence considérable
+    entre les deux modèles.
+\end{itemize}
+
+\verb?CPLEX? est également difficile a utiliser sans un langage de modélisation. À ce titre, \verb?OPL?
+est un candidat parfait. Je reviendrai dessus un peu plus loin.\\
+
+\verb?CPLEX? est, à mon avis, un excellent solveur, toutefois je pense qu'il est nécessaire
+d'étudier ses options si l'on veut véritablement exploiter tout son potentiel.\\
+Il peut être également intéressant de tester les performances de \verb?CPLEX? contre \verb?CP? ;
+il est possible que certains PLNE soient résolus beaucoup plus rapidement
+si on utilise la programmation par contraintes.
+
+\subsection{CP}
+\verb?CP? est le solveur d'\verb?IBM? - \verb?ILOG? pour la programmation par contrainte.
+J'ai utilisé la version 2 et ai tout simplement été bluffé par ses performances (il y a un
+facteur $> 10$ par rapport à choco sur les cas testés et les temps de calcul ne sont même
+pas comparables avec \verb?CPLEX?).\\
+
+Comme \verb?CPLEX? il est à utiliser avec un langage de modélisation, comme \verb?OPL?.
+En revanche, je n'ai pas regardé ses options.\\
+
+Je serais très intéressé de connaître les résultats de tests des performances approfondis de \verb?CP?
+contre \verb?CPLEX?. Les exemples que j'ai traité donnant très largement l'avantage à \verb?CP?...
+
+\subsection{OPL}
+\verb?OPL? est le langage de modélisation d'\verb?IBM? - \verb?ILOG?. Il est très intuitif est
+très simple à prendre en main. Il est fournit avec une \verb?IDE? pour sa version windows
+(je ne l'ai pas testé).\\
+L'exécutable d'\verb?OPL? permet de résoudre directement les problèmes sans avoir à les
+exporter préalablement pour les soumettre au solveur ensuite (chose qu'il permet également).\\
+
+D'après moi, \verb?OPL? est tout simplement le langage ``naturel'' pour résoudre des
+problèmes avec \verb?CP? ou \verb?CPLEX?.
+
+\section{Logiciels libres}
+J'ai également utilisé plusieurs logiciels libres au cours de mon TER.
+Ils sont tous très intéressants dans leurs domaines.
+
+\subsection{Boost}
+\verb?Boost?\lien{http://www.boost.org/} est une librairie très riche dont j'ai utilisé la partie graphe.\\
+C'est une librairie \verb?C++? implémentée entièrement à base de templates
+ce qui lui octroie une grande flexibilité. Toutefois cette flexibilité est coûteuse car
+la compilation des template est très longue ce qui ralentit le processus de développement.
+Pour palier à celà, \verb?Boost? dispose de bindings \verb?Python? permettant de s'affranchir
+de l'étape de compilation des programmes.\\
+\verb?Boost? différencie concepts (\verb?graph_traits?) et implémentation pour un graphe. Cette 
+différence est assez subtile et rend \verb?Boost? extrèmement flexible mais très
+difficile à manipuler. Pour une utilisation intensive, la lecture d'un livre de référence
+s'impose et la documentation ne suffira probablement pas.\\
+
+\verb?Boost? dispose de très nombreux algorithmes classiques (exploration de graphes,
+plus courts chemins, composantes connexes, flot max, ...).
+Toutefois il ne propose pas d'algorithme pour les problèmes $NP-durs$ bien que quelques
+heuristiques sont données à titre d'exemples dans la documentation.\\
+
+\verb?Boost? est très puissant et complet. Cette librairie est optimisée et destinée
+a être utilisé dans des programmes en \verb?C++?, ce qui permet d'obtenir du code
+très performant. Toutefois, son utilisation n'est pas toujours naturelle même pour des
+programmeurs expérimentés comme en témoignent les forums.
+
+\subsection{Choco}
+\verb?Choco?\lien{http://www.emn.fr/z-info/choco-solver/index.html} est un projet français de
+solveur pour la programmation par contraintes.
+C'est une librarie \verb?Java? très simple à manipuler.\\
+
+La force de \verb?Choco? réside à la fois dans sa simplicité (très simple à utiliser,
+dans un langage de programmation facilement accessible) et ses performances
+qui sont à mon goût très satisfaisantes même si elles sont bien inférieures à celles de \verb?CP?
+qui doit, vraisemblablement, disposer de toutes les optimisations réalisées dans \verb?Choco?
+puisque ce dernier est distribué sous licence BSD, une des moins restrictives du monde logiciel libre.\\
+
+\verb?Choco? dispose également d'options avancées comme la possibilité de maximiser/minimiser une
+fonction objective ou de chercher une solution ou toutes les solutions à un problème.\\
+
+Toutefois, ce qui fait la force de \verb?Choco? fait aussi sa faiblesse : le choix de \verb?Java?
+comme langage de programmation ne permet pas d'espérer pouvoir atteindre des performances maximales.\\
+
+Malgré ce dernier défaut, \verb?Choco? est un projet extrèmement intéressant et n'ayant pas à
+pâlir de ses performances. Des tests de performances se révèlerait intéressants pour lever le voile
+sur la différence avec son concurrent \verb?CP?. Même si l'issue ne fait pas de doûte, l'estimation
+du facteur peut se révéler des plus instructives.
+
+\subsection{Cliquer}
+\verb?Cliquer?\lien{http://users.tkk.fi/pat/cliquer.html} est un projet de Patric R. J. Östergård's\lien{http://users.tkk.fi/~pat/}.
+Il propose un algorithme exact pour trouver une clique max dans un graphe quelconque (fichier
+fournit au format \verb?Dimacs?) ainsi qu'une API permettant d'utiliser ses programmes dans
+des programmes en \verb?C/C++?. Le programme principal est très simple à utiliser
+dans la ligne de commande.\\
+
+L'efficacité de son programme est très impressionnante (de l'ordre du dixième de secondes pour
+trouver une clique max dans un graphe à plusieurs centaines de sommets et arêtes) mais ceci
+reste à confirmer par d'autres tests puisuq'il semblerait que dans les fichiers que j'ai testé
+la clique max soit en tête de la description.
+
+
+\section{Conclusion}
+Tous ces programmes sont intéressants dans leurs domaines et ont des points faibles et
+des défauts. Je vous ai fait part de mes impressions tout en essayant d'être le plus objectif
+poissible mais je n'ai eu qu'un aperçu de la plupart des ces programmes et
+tout ce qui concerne les performances reste à
+confirmer par de véritables benchmarks.\\
+
+J'espère que ces quelques lignes vous auront été utiles :)

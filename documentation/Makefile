@@ -10,6 +10,11 @@ protocole.pdf :
 	$(LATEX) protocole.tex
 	mv $@ ../;
 
+comp : comparatif.pdf
+
+comparatif.pdf :
+	$(LATEX) comparatif.tex
+
 %.pdf:	%.tex
 	$(LATEX) $^
 	bibtex $(patsubst %.tex,%,$^)

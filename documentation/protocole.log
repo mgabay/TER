@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.11.28)  7 MAR 2010 17:00
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.11.28)  28 APR 2010 19:55
 entering extended mode
  %&-line parsing enabled.
 **protocole.tex
@@ -496,9 +496,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 89--94
 (\end occurred when \iftrue on line 42 was incomplete)
 (\end occurred when \ifnum on line 42 was incomplete) 
 Here is how much of TeX's memory you used:
- 3732 strings out of 256216
- 46240 string characters out of 1917071
- 104994 words of memory out of 1500000
+ 3733 strings out of 256216
+ 46247 string characters out of 1917071
+ 105012 words of memory out of 1500000
  6956 multiletter control sequences out of 10000+200000
  11662 words of font info for 43 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191

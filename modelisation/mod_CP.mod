@@ -39,7 +39,6 @@ execute max_degree_n_arretes {
 float chi_min = V^2 / (V^2 - 2*n_arretes); // Un minorant du nombre chromatique
 
 dvar int+ z; // Nombre chromatique
-dvar int y[sommets][sommets] in 0..1; // Contraintes actives
 dvar int c[sommets] in 1..d+1; // Coloration
 
 
@@ -52,10 +51,6 @@ subject to {
 
     forall ( i in 1..clique ) { // On initialise y en conséquence
         c[i] == i;
-        forall ( j in i+1..V ) { // On initialise y en conséquence
-            y[i][j] == 0;
-            y[j][i] == 1;
-        }
     }
 
     if(chi_min == V) { // Le graphe est complet
