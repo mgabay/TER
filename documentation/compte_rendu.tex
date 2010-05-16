@@ -1,0 +1,123 @@
+\input{dirs}
+
+\documentclass[a4paper,12pt]{article}
+
+% vérifier si le document est compilé en pdf et inclus hyperref
+\newif\ifpdf
+    \ifx\pdfoutput\undefined
+       \pdffalse
+    \else
+       \pdfoutput=1
+       \pdftrue
+    \fi
+\ifpdf
+    \usepackage{pslatex}
+    \usepackage[pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}     \pdfcompresslevel=9
+\else
+    \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\fi
+
+\usepackage{color}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{dsfont}
+
+\usepackage{graphicx}
+\usepackage{fancybox, fancyhdr}
+\usepackage{amsmath, amsthm, amsfonts,graphicx,chngpage}
+\usepackage{fancyhdr} 
+\usepackage{listings}
+
+\addto\captionsfrench{%
+\renewcommand{\chaptername}{Partie}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\lien}[1]{%
+    $\,$\footnote{$\,$\url{#1}}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Théorème}%[section]
+\newtheorem{corollaire}{Corollaire}%[section]
+\newtheorem{propos}{Proposition}%[section]
+\newtheorem{prop}{Propriété}%[section]
+\newtheorem{conj}{\textit{Conjecture}}%[section]
+%\setcounter{prop}{0} pour réinitialiser le compteur
+\theoremstyle{definition}
+\newtheorem{defin}{Définition}%[section]
+\theoremstyle{remark}
+\newtheorem{rmq}{Remarque}%[section]
+
+\definecolor{grey}{rgb}{0.95,0.95,0.95} % gris très clair
+\definecolor{yellorg}{rgb}{0.99,0.97,0.84}
+\definecolor{pink}{rgb}{0.63,0.13,0.64}
+\definecolor{green}{rgb}{0.13,0.55,0.13}
+\definecolor{blue}{rgb}{0.03,0.03,1}
+\definecolor{redemacs}{rgb}{0.70,0.13,0.13}
+\definecolor{red}{rgb}{1,0,0}
+\lstset{
+  language=R,
+  columns=flexible,
+  %caption=\lstname,%
+  identifierstyle = \color{blue},
+  keywordstyle=\color{green}\bfseries,
+  commentstyle=\color{redemacs},
+  stringstyle=\color{pink},
+  numbers=left,
+  stepnumber=5,
+  firstnumber=1,
+  %includerangemarker=false,
+  backgroundcolor=\color{yellorg},
+  frame=single
+}
+
+% début du document --------------------------
+
+\begin{document}
+
+% titre ------------------------------
+
+\input{cptr-title}
+
+% tab0les ------------------------------
+
+\changepage	{2cm}%amount added to textheight
+           		{4cm}%amount added to textwidth
+           		{-2cm}%amount added to evensidemargin
+           		{-2cm}%amount added to oddsidemargin
+           		{}%amount added to columnsep
+           		{-2cm}%amount added to topmargin
+           		{}%amount added to headheight
+           		{10pt}%amount added to headsep
+           		{}%amount added to footskip
+
+\pagestyle{fancy}
+\lhead{\includegraphics[scale=1.25]{G_Scop_H60.jpg}}
+\thispagestyle{headings}
+\setcounter{page}{1}
+\pagenumbering{roman}
+\tableofcontents
+% \listoffigures
+% \newpage
+% \listoftables
+% \newpage
+
+\quad \\
+
+% contenu ------------------------------
+
+\include{cptr}
+
+
+% Annexes ----------------------------------------
+
+% \appendix
+% \include{append1} => premiere annexe
+
+
+% Bibliographie ----------------------------------
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{Biblio/biblio}
+
+\end{document}

@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{berge-graphes}
 C.~Berge.
@@ -23,5 +23,32 @@ T.R. Jensen and B.~Toft.
 \newblock {\em Bull. Amer. Math. Soc. 33 (1996), 287-288. DOI:
   10.1090/S0273-0979-96-00651-9 PII: S 0273-0979 (96) 00651-9 Copyright of
   article: Copyright 1996, American Mathematical Society}, 1996.
+
+\bibitem{wiki}
+Wikipedia, l'encyclopédie libre.
+\newblock \url{http://en.wikipedia.org/wiki/Main_Page}.
+
+\bibitem{Boost}
+Boost library.
+\newblock \url{http://www.boost.org/}.
+
+\bibitem{bgl}
+Boost Graph~Library (BGL).
+\newblock
+  \url{http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/table_of_contents.h%
+tml}.
+
+\bibitem{tepper}
+Michael Trick's Operations~Research Page.
+\newblock \url{http://mat.tepper.cmu.edu/}.
+
+\bibitem{ibm}
+IBM $-$ ILOG.
+\newblock
+  \url{http://www-01.ibm.com/software/websphere/products/optimization/}.
+
+\bibitem{choco}
+CHOCO.
+\newblock \url{http://www.emn.fr/z-info/choco-solver/index.html}.
 
 \end{thebibliography}

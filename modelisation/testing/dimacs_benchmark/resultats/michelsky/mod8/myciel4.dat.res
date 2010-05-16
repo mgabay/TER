@@ -45,7 +45,7 @@ Root relaxation solution time =    0,00 sec.
     800    48    infeasible              5,0000        4,0000     5751   20,00%
     900    34        4,0000     5        5,0000        4,0000     6060   20,00%
    1000    28    infeasible              5,0000        4,0000     6526   20,00%
-Elapsed real time =   0,54 sec. (tree size =  0,01 MB, solutions = 2)
+Elapsed real time =   0,53 sec. (tree size =  0,01 MB, solutions = 2)
    1100    10    infeasible              5,0000        4,0000     6905   20,00%
    1200    12    infeasible              5,0000        4,0000     7468   20,00%
 
@@ -60,9 +60,9 @@ Root node processing (before b&c):
 Parallel b&c, 2 threads:
   Real time             =    0,57
   Sync time (average)   =    0,04
-  Wait time (average)   =    0,13
+  Wait time (average)   =    0,12
                           -------
-Total (root+branch&cut) =    0,62 sec.
+Total (root+branch&cut) =    0,61 sec.
 
 <<< solve
 

@@ -47,7 +47,7 @@ Root relaxation solution time =    0,00 sec.
     800    17    infeasible              4,0000        3,0000     3660   25,00%
     900    13        3,0000    29        4,0000        3,0000     4203   25,00%
    1000    16        3,0000     3        4,0000        3,0000     4662   25,00%
-Elapsed real time =   0,44 sec. (tree size =  0,01 MB, solutions = 1)
+Elapsed real time =   0,43 sec. (tree size =  0,01 MB, solutions = 1)
    1100    19        3,0000     1        4,0000        3,0000     5195   25,00%
    1200     8    infeasible              4,0000        3,0000     5827   25,00%
 
@@ -61,11 +61,11 @@ Gomory fractional cuts applied:  16
 Root node processing (before b&c):
   Real time             =    0,06
 Parallel b&c, 2 threads:
-  Real time             =    0,44
+  Real time             =    0,43
   Sync time (average)   =    0,04
   Wait time (average)   =    0,11
                           -------
-Total (root+branch&cut) =    0,50 sec.
+Total (root+branch&cut) =    0,49 sec.
 
 <<< solve
 

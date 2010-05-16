@@ -58,7 +58,7 @@ Gomory fractional cuts applied:  59
 Root node processing (before b&c):
   Real time             =    0,04
 Parallel b&c, 2 threads:
-  Real time             =    0,60
+  Real time             =    0,61
   Sync time (average)   =    0,05
   Wait time (average)   =    0,13
                           -------

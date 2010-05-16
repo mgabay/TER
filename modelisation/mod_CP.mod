@@ -14,12 +14,14 @@ int n_arretes = 0; // le nombre d'arrêtes du graphe simple correspondant
     cplex.TiLim = 0;
 }*/
 
+float densite;
 execute max_degree_n_arretes {
     d = 0;
     for ( var i in sommets ) {
         d2 = 0;
         for ( var j in sommets )
-            d2++;
+            if ( m[i][j] != 0 )
+                d2++;
         if ( d2 > d )
             d = d2;
     }
@@ -34,6 +36,9 @@ execute max_degree_n_arretes {
     }
     n_arretes /= 2;
     writeln("\n\nLe nombre d'arrètes du graphe simple correspondant est : ", n_arretes);
+
+    densite = n_arretes / (V*(V-1)/2);
+    writeln("\n\nLa densité du graphe est : ", densite);
 }
 
 float chi_min = V^2 / (V^2 - 2*n_arretes); // Un minorant du nombre chromatique

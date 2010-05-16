@@ -5,44 +5,44 @@ A level-1 auxiliary file: Notes/notes.aux
 A level-1 auxiliary file: Notes/ideas.aux
 The style file: unsrt.bst
 Database file #1: Biblio/biblio.bib
-You've used 4 entries,
+You've used 10 entries,
             1791 wiz_defined-function locations,
-            464 strings with 3955 characters,
-and the built_in function-call counts, 987 in all, are:
-= -- 90
-> -- 20
+            483 strings with 4419 characters,
+and the built_in function-call counts, 1629 in all, are:
+= -- 128
+> -- 38
 < -- 4
-+ -- 9
-- -- 5
++ -- 19
+- -- 9
 * -- 44
-:= -- 137
-add.period$ -- 12
-call.type$ -- 4
-change.case$ -- 1
+:= -- 215
+add.period$ -- 24
+call.type$ -- 10
+change.case$ -- 3
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 60
-empty$ -- 108
-format.name$ -- 5
-if$ -- 244
+cite$ -- 10
+duplicate$ -- 90
+empty$ -- 216
+format.name$ -- 9
+if$ -- 400
 int.to.chr$ -- 0
-int.to.str$ -- 4
+int.to.str$ -- 10
 missing$ -- 7
-newline$ -- 23
-num.names$ -- 4
-pop$ -- 24
+newline$ -- 47
+num.names$ -- 8
+pop$ -- 74
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 36
+skip$ -- 63
 stack$ -- 0
 substring$ -- 56
-swap$ -- 24
+swap$ -- 30
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 8
-width$ -- 5
-write$ -- 44
+while$ -- 12
+width$ -- 12
+write$ -- 86

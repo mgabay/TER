@@ -1,0 +1,399 @@
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section*{Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
+Avant toute chose, je tiens à remercier Nadia \textsc{Brauner} pour son encadrement et ses conseils
+éclairés tout au long du TER et Julien \textsc{Dardel}, notamment,
+pour l'aide qu'il m'a apporté avec \verb?CPLEX?
+et pour trouver des instances de test.
+
+\section{Introduction}
+La question posée par le sujet est la suivante :\\
+\textbf{Quelle taille de graphe peut-on colorier optimalement avec un ordinateur aujourd'hui ?}\\
+
+Colorier un graphe consiste à affecter une couleur à chacun de ses
+sommets de sortes que deux sommets adjacents n'aient pas la même couleur (on peut de la même façon définir
+la coloration des arêtes mais ce problème se ramène très failement à la coloration des sommets en envisageant
+le graphe de lignes correspondant).\\
+Le problème consistant à déterminer le nombre chromatique d'un graphe $G$
+(i.e. le nombre minimal de couleurs nécessaires, noté $\chi(G)$)
+est $\mathcal{NP}-complet$ c'est donc un problème difficile pour lequel trouver la solution exacte en
+un temps polynomial avec un algorithme déterministe est impossible à moins que $\mathcal{P}=\mathcal{NP}$.\\
+
+L'objet de ce TER est donc de déterminer - compte-tenu des outils et ressources disponibles aujourd'hui -
+jusqu'à quelle taille de graphe on peut espérer pouvoir le colorier optimalement en un temps raisonnable.\\
+
+Afin d'y répondre, j'ai commencé par me documenter puis à envisager plusieurs solutions pour la coloration de graphes.
+J'ai ensuite implémenté une solution sous forme de programme linéaire en nombre entiers et j'ai utilisé \verb?CPLEX?
+pour résoudre des instances du problème. Puis, j'ai amélioré mon modèle en ajoutant des coupes intéressantes.
+Après ceci, j'ai modélisé le problème en utilisant la programmation par contrainte et je l'ai
+résolu avec \verb?Choco? et \verb?CP?.\\
+Enfin, j'ai soumis mes algorithmes à une campagne de tests dont j'ai interprété les résultats.\\
+
+Dans mon processus de réflexion, je me suis focalisé sur des graphes simples et connexes, toutefois
+j'ai pris soin de faire en sorte que mes modèles soient valides pour des multigraphes sans surcoût
+(on considère alors le graphe simple correspondant au multigraphe) et des graphes non connexes.
+Toutefois, dans le cas de graphes non connexes il serait plus judicieux de passer par une étape
+de préprocessing identifiant et séparant les composantes connexes pour les soumettre séparément
+au solveur plutôt que de soumettre le graphe directement.
+
+\section{Bibliographie}
+Comme indiqué dans l'introduction, le première partie de mon travail a été un travail bibliographique.
+J'ai lu les chapitres concernant la coloration de graphe (coloration des arêtes \cite{berge-arretes} et
+des sommets \cite{berge-sommets}) du livre Graphes et Hypergraphes \cite{berge-graphes} de Claude Berge.
+Je me suis également intéréssé au livre Graph coloring problems \cite{jensen1996graph} de Jensen et Toft.\\
+Bien entendu, je me suis également servi d'internet et de \href{http://en.wikipedia.org/wiki/Main_Page}{wikipedia}
+\cite{wiki}.\\
+
+De cette étude sont ressortis plusieurs résultats et en particulier la minoration suivante :
+\begin{theorem}
+\label{minor}
+Dans un graphe simple $G$ de $n$ sommets et $m$ arêtes, on a :
+$$\chi(G) \geq \frac{n^2}{n^2-2m}$$
+\end{theorem}
+Qui donne une borne inférieure très intéressante, notamment lorsque le graphe est dense.
+
+\section{La coloration comme Programme Linéaire en Nombres en Entiers}
+\subsection{Modélisation}
+La première partie de mon travail a été de modéliser le problème de coloration de graphe
+en programme linéaire en nombres entiers.\\
+Le modèle obtenu et utilisé est le suivant :\\
+Pour un graphe $G=(V,E)$ :
+\begin{equation}
+\label{model-plne}
+\left\{
+    \begin{array}{ll}
+        \text{min }z & \\
+	c_i \leq z & \forall i \in V\\
+        c_i \leq c_j - 1 + n\times y_{i,j}& \forall (i,j)\in E\\
+        c_j \leq c_i - 1 + n\times (1-y_{i,j})& \forall (i,j)\in E\\
+	y_{i,j} \in \{0,1\} & \forall (i,j)\in E\\
+	c \in (\mathbb{N}^*)^{|V|}
+    \end{array}
+\right.
+\end{equation}
+
+$c$ correspond au vecteur de la coloration et $y$ à l'activation des contrainte (en fait
+$y$ permet de linéariser la contrainte $|c_i-c_j| \geq \delta_{i,j}$ où $\delta_{i,j}=1$
+si $(i,j)\in E$ et $\delta_{i,j}=0$ sinon - dit autrement, cette contrainte correspond à
+``deux sommets adjacents ne sont pas de même couleur'').\\
+
+\subsection{Résolution}
+Pour modéliser et résoudre ce problème, j'ai utilisé \verb?CPLEX? et \verb?OPL?.\\
+\verb?CPLEX? est un solveur permettant de résoudre des programmes linéaires en nombres entiers
+de manière exacte. C'est un logiciel d'\verb?IBM?-\verb?ILOG? \cite{ibm}.\\
+\verb?OPL? est le langage de modélisation d'\verb?IBM?-\verb?ILOG?. Il permet de
+modéliser facilement des problèmes complexes pour les soumettre à \verb?CPLEX?.\\
+
+Toutefois, la programmation linéaire en nombre entier est un problème $\mathcal{NP}-complet$,
+il ne faut donc pas espérer pouvoir résoudre facilement le programme linéaire en nombres
+entiers (\ref{model-plne}) facilement pour n'importe quel graphe.\\
+
+Afin de pouvoir résoudre le problème, je l'ai modélisé et j'ai recherché 
+des majorations et des contraintes permettant de résoudre plus rapidement le problème.
+J'ai également essayé d'optimiser l'aspect algorithmique du problème en évitant des opérations inutiles
+(placement des contraintes, initialisation et ajout de contraintes sous certaines conditions...).\\
+J'ai pris le soin de démontrer les coupes utilisées et de vérifier leurs compatibilités afin
+de garantir mon modèle.\\
+
+Pour représenter les graphes, j'ai utilisé la matrice d'adjacence du graphe car compte-tenu de la
+complexité du problème, celle-ci sera toujours de dimension réduite. De plus, c'est l'outil idéal
+pour manipuler les données car le problème de coloration de graphe est un problème d'adjacence des
+sommets (deux \underline{sommets adjacents} ne sont pas de même couleur).\\
+
+J'ai modélisé $y$ comme une matrice de $\mathcal{M}_n(\{0,1\})$ où $n$ est l'ordre du graphe
+à colorier (i.e. le nombre de sommets du graphe).\\
+
+\underline{Remarque} : j'ai fait en sorte que les programmes et modèles permettent de colorer des
+multigraphes (les graphes simples étant des multigraphes particuliers).
+
+\subsubsection{Validation}
+A chaque amélioration du modèle, je l'ai testé sur de nombreux graphes afin de
+permettre d'une part de valider l'interêt des améliorations apportées en termes d'efficacité de la résolution
+et d'autre part,
+de valider le modèle (vérifier que le nombre de couleurs obtenu est bien le nombre
+chromatique et que la coloration optimale renvoyée est valide).\\
+
+Pour vérifier la bonne coloration du graphe, j'ai testé les modèles sur des graphes
+de petite taille et je les ai vérifiés manuellement.\\
+De plus, afin d'effectuer les tests d'efficacité et de valider mes modèles, j'ai choisit dans un premier
+temps d'utiliser comme instances de tests des graphes complets.
+J'ai fait ce choix pour deux raisons. La première est qu'ils me permettent de vérifier
+facilement la bonne coloration.
+\hypertarget{maxc}{La} seconde est qu'ils constituent le pire cas pour le nombre
+chromatique (celui-ci est majoré par $d+1$ où $d$ est le degré maximum d'un sommet dans le graphe
+simple correspondant et dans le cas d'un graphe complet, $\chi(G)=d+1$), dans le cas où on ne
+dispose pas d'une minoration intéressante ils forcent donc le solveur a énumérer et tester un très grand
+nombre de solutions.\\
+
+Toutefois, une minoration interessante est fournie pas le théorème \ref{minor} (en particulier, elle vaut
+$n$ pour un graphe complet d'ordre $n$ : $K_n$). Une fois cette minoration
+implémentée, j'ai donc du tester mes modèles sur d'autres exemples.\\
+J'ai choisit d'utiliser les instances du challenge dimacs de coloration de graphe \cite{dimacs}, celles-ci offrant des
+exemples variés et dont on connait, pour une partie, le nombre chromatique.
+J'ai également testé l'efficacité de la résolution sur des multigraphes connexes que j'ai généré en utilisant
+la librairie \verb?Boost?. La répartition des arêtes suivant une loi uniforme.\\
+
+Les instances utilisées sont disponibles aux adresses suivantes (fichiers .col), sur
+la page de Michael Trick \cite{tepper} :
+\url{http://mat.tepper.cmu.edu/COLOR04/} et \url{http://mat.gsia.cmu.edu/COLOR/instances.html}.\\
+\verb+Boost+ \cite{Boost} est une collection de librairies \verb?C++? open-source. Vous trouverez plus
+d'informations sur \verb+Boost+ à cette adresse : \url{http://www.boost.org/}. J'ai particulièrement utilisée
+la \verb?Boost Graph Library? \cite{bgl}.
+
+\subsubsection{Optimisations}
+\label{opt}
+Comme expliqué précédemment, j'ai amélioré et testé les performances de mes algorithmes.
+Je vais ici détaillé les améliorations apportées aisi que les gains associés en performances
+(donnés en pourcents - ces gains correspondent à la moyenne de gains de performances par rapport au modèle
+précédent sur des graphs testés dans les deux cas).\\
+Pour tester ces exemples, j'ai utilisé \verb?CPLEX? 10 pour architectures 32 et 64 bits afin
+de tester les performances du solveur également. Mes tests m'ont rapidement poussé à adopter
+\verb?CPLEX? 10 pour architectures 64 bits, le gain en performances étant non négligeable.\\
+
+\underline{Remarque} : afin de vous faire ressentir les améliorations apportées en termes de
+performances, j'indique dans la suite de cette partie certains temps écoulés pour la coloration et le
+nombre d'itérations de l'algorithme.
+Les données en temps ne sont qu'un indicateur subjectif : elles dépendent fortement de la machine,
+du nombre d'itérations de l'algorithme et du nombre de noeuds explorés lors de la résolution.
+Les calculs ayant été effectués sur mon ordinateur
+portable, les données en temps ne sont en aucun cas représentative de ce qui aurait été obtenue
+sur un serveur dédié. Des tests de performance plus poussés et détaillés se trouvent
+dans la section \ref{tests}.\\
+
+Le modèle initial ne correspond pas exactement au modèle (\ref{model-plne}) - j'y ai apporté la
+modification expliquée \hyperlink{maxc}{plus haut} : le vecteur des couleurs est un
+vecteur d'entiers compris entre 1 et $d+1$ (où $d$ est le degré maximum d'un sommet du graphe simple
+correspondant). Pour ce premier modèle, les performances sont exécrables : l'algorithme
+colore $K_{10}$ en 52 secondes et 428761 itérations de l'algorithme
+($K_n$ est le graphe complet à $n$ sommets).\\
+
+Les amélioration apportées sont les suivantes (le gain est le pourcentage
+de temps économisé par rapport à la résolution utilisant toutes les optimisations précédentes) :
+\begin{enumerate}
+ \item \label{p1}\textbf{Fixer la couleur du premier sommet} (\verb?c[1] == 1? dans le modèle).\\
+    Coloration de $K_{10}$ en 3,8 secondes et 30470 itérations de l'algorithme.\\
+    Coloration de $K_{30}$ non terminée après 2 heures et presque 15 millions d'itérations.\\
+    \textbf{Gain} : 93\%.
+ \item \label{p2}\textbf{Ajout de la minoration obtenue par le théorème \ref{minor}} (\verb?z >= chi_min?).\\
+    Cette minoration du nombre chromatique est particulièrement efficace pour les graphes très denses.\\
+    En témoigne l'amélioration des performances sur les graphes complets :\\
+    Coloration de $K_{10}$ en moins de 0,1 secondes et 72 itérations de l'algorithme.\\
+    Coloration de $K_{30}$ en 1,2 secondes et 2275 itérations de l'algorithme.\\
+    Coloration de $K_{100}$ en 36 secondes et 34645 itérations de l'algorithme.\\
+    \textbf{Gain} : 
+    \begin{itemize}
+      \item $>99\%$ sur les graphes complets (car on a alors
+	\verb?chi_min?$=n=\chi(G)$).
+      \item élevé sur les graphes denses.
+      \item faible sur les graphes peu denses
+    \end{itemize}
+ \item \label{p3}\textbf{Initialisation de \verb?y[1][i]? et \verb?y[i][1]?}.\\
+    On avait précédemment rajouté l'initialisation du premier sommet, on peut
+    également initialiser les valeurs de $y$ correspondantes.\\
+    \textbf{Gain} : presque nul sous \verb?CPLEX? 10 car 1 étant le premier sommet, \verb?CPLEX? 10 fixe
+      les valeurs de $y$ correspondantes au début de chaque itérations avant de passer aux autres sommets.
+      C'est en quelque sorte une duplication de contrainte.\\
+      Toutefois, j'ai constaté un gain de performances de l'ordre de $5\%$ sous \verb?CPLEX? 12 pour une duplication
+      similaire. C'est probablement parce qu'il fixe alors définitivement les valeurs de $y$ correspondantes.
+ \item \label{p4}\textbf{Test de la valeur de \verb?m[i][j]? pour ajouter les contraintes de non adjacence des couleurs}.\\
+      \verb?m? est la matrice d'adjacence du graphe.\\
+      Jusqu'à présent, les contraintes de non adjacence des couleurs (les deux dernières inéquations dans
+      \ref{model-plne}) étaient de la forme :\\
+      \verb?m[i][j] * c[i] <= c[j] - 1 + V * y[i][j]?,
+      on avait donc dans le modèle un nombre important de contraintes inutiles et pénalisant l'exécution de l'algorithme (car
+      elles doivent quand même être évaluées pour fixer les valeurs de $y$). De plus, le modèle ne fonctionnait
+      alors que pour des graphes \textbf{simples}.\\
+      En ajoutant la contrainte \verb?c[i] <= c[j] - 1 + V * y[i][j]?
+      si et seulement si \verb?m[i][j] != 0? (c'est le test), on élimine des contraintes pénalisant l'algorithme
+      et on peut désormais colorier des \textbf{multigraphes} - en prennant soin de bien calculer les autres variables :
+      par exemple, $d$, le degré maximum d'un sommet utilisé pour certaines majorations doit être
+      celui du graphe simple correspondant, il n'est donc pas égal à
+      $\frac{1}{2}\underset{i}{\max}(\sum_{j=1}^n m_{i,j})$ mais à
+      $\frac{1}{2}\underset{i}{\max}(\sum_{j=1}^n \mathds{1}_{m_{i,j}\neq0})$,
+      il en va de même pour les autres variables qui sont à calculer dans
+      le graphe simple correspondant.\\
+      \textbf{Gain} : $14\%$ sur $K_{100}$ (colorié en 31s).   
+ \item \textbf{Ajout des contraintes de non adjacence des couleurs pour $j > i$ seulement}.\\
+      Il s'agit en fait d'une contrainte inutilement dupliquée car on a :
+      $$c_i \leq c_j - 1 + n\times y_{i,j} \Leftrightarrow c_i \leq c_j - 1 + n(1 - \times y_{j,i})$$
+      et de même :
+      $$c_j \leq c_i - 1 + n\times (1-y_{i,j}) \Leftrightarrow c_j \leq c_i - 1 + n\times y_{j,i}$$
+      car $y_{i,j}=1-y_{j,i}$.\\
+      Il suffit donc d'écrire ces contraintes une seule fois.\\
+      Ceci réduit le nombre de contraintes total de plus de la moitié (on passe de $2n^2$ contraintes de
+      non adjacence des couleurs à  $n^2 - n$ contraintes).
+ \item \label{p5}\textbf{Teste si le graphe est complet} (\verb?chi_min == n?).\\
+    C'est l'ajout d'un cas particulier coloriable trivialement.\\
+    \textbf{Gain} : $>99\%$ si le graphe est complet, $0\%$ sinon (pas de pertes
+    de performances).
+ \item \label{p6}\textbf{Ajout de la contrainte $y_{i,j}=1-y_{j,i}$}.\\
+      C'est l'interêt de $y_{i,j}$ qui permettent l'activation des contraintes des couleurs différentes.\\
+      Il suffit de remplacer $y_{i,j}$ par sa valeur dans le modèle (\ref{model-plne}) pour constater que dans le cas où
+      $y_{i,j}=0$, la première inéquation appliquée à $i$ et $j$ donne $c_i\leq c_j - 1$ et $c_j \leq c_i - 1$
+      ce qui est absurde. De même avec la deuxième équation si $y_{i,j}=1$.\\
+      Notons que lorsque cette contrainte est mal placée dans le programme (i.e. après les contraintes les
+      deux inéquations), l'effet est désastreux et on perd fortement en efficacité.\\
+      \textbf{Gain} : $46\%$ sur des multigraphes dont les arêtes sont distribuées selon
+      une loi uniforme.
+ \item \label{p7}\textbf{Ajout de la contrainte $c_i \leq i$}.\\
+    Il existe toujours une coloration optimale telle que pour tout $i$, $c_i \leq i$.
+    En ajoutant cette contrainte, on limite grandement le nombre de colorations que
+    le solveur va tester. Même si on limite également le nombre de solutions avec une coloration
+    optimale qu'il peut trouver, cette diminution est négligeable devant celle du nombre
+    de noeuds explorés par le solveur.
+    \textbf{Gain} : $87\%$ sur des multigraphes dont les arêtes sont distribuées selon
+      une loi uniforme.
+\item \label{p8}\textbf{Prise en compte d'une clique dans la coloration}.\\
+    Une clique est un sous-graphe complet du graphe d'origine.\\
+    Les sommets d'une clique étant tous adjacents entre eux, ils sont deux à deux de couleurs
+    différentes. On peut donc, pour initialiser la résolution, commencer par affecter
+    des couleurs aux sommets d'une clique.\\
+    Toutefois, si on veut préserver la contrainte très puissante : $c_i\leq i$, il faut prendre
+    le soin de mettre les $k$ sommets de la clique en positions 1 à $k$ de la matrice d'adjacence
+    afin de pouvoir initialiser leurs couleurs en garantissant qu'il existera toujours une coloration
+    optimale avec $c_i\leq i$.\\
+    \textbf{Gain} : le gain dépend fortement des caractéristiques du graphe. Plus la taille de la
+    clique est proche du nombre chromatique, plus le gain sera substantiel (celui-ci allant de $0$
+    à $70\%$).
+\end{enumerate}
+
+J'ai également essayé d'ajouter la contrainte $c_i\leq d(v_i)+1$ ($d(v)$ est le degré de $v$)
+mais celle-ci ne permet pas de gagner
+en performances. Dans certains cas, elle dégrade même les performances de la résolution.\\
+
+Toutes ces optimisations ont permis de passer d'un modèle exécrable à un modèle permettant
+d'envisager de colorier optimalement bon nombre de graphes.\\
+Vous trouverez section \ref{tests} des tests de performances et des analyses. 
+ 
+\section{La coloration comme Programme Par Contraintes}
+La programmation par contrainte est un moyen puissant permettant de décrire et résoudre des
+problèmes. Elle consiste à décrire le problème en utilisant des contraintes.
+Contrairement à la programmation linéaire en nombre entier, nous ne sommes pas
+limités à des inéquations mais nous pouvons également utiliser toute sortes d'outils
+tels que les inégalités, les minimum, les maximum, des valeurs absolues...\\
+La puissance de la programmation par contrainte réside dans sa simplicité
+comme en témoigne la modélisation du problème de coloration de graphe section suivante.\\
+
+Tout comme la résolution d'un programme linéaire en nombre entier,
+la résolution d'un programme par contraintes est un problème $\mathcal{NP}-complet$.
+Toutefois, les méthodes employées pour résoudre un problème par contrainte
+diffèrent de la programmation linéaire en nombre entiers.
+Employer une deuxième modélisation, permettra donc de voir quelle méthode
+se prête le mieux à la résolution du problème de coloration de graphes.
+
+\subsection{Modélisation}
+Le problème de coloration de graphe se modélise en programmation par contraintes
+de la manière suivante :
+\begin{equation}
+\label{model-ppc}
+\left\{
+    \begin{array}{ll}
+        \text{min }z & \\
+	c_i \leq z & \forall i \in V\\
+        c_i \neq c_j & \forall (i,j)\in E\\
+	c \in (\mathbb{N}^*)^{|V|}
+    \end{array}
+\right.
+\end{equation}
+
+
+\subsection{Résolution du programme par contraintes}
+Afin de résoudre le problème, j'ai utilisé \verb?CHOCO? 2.1.1 \cite{choco}
+et \verb?CP? 2.\\
+Le premier est un solveur open-source dévelopé, entre autres, par des chercheur nantais.
+Il offre une API en \verb?Java?.\\
+Le second est développé par \verb?IBM? - \verb?ILOG? \cite{ibm}, tout comme \verb?CPLEX?.\\
+
+L'utilisation de ces deux solveurs m'a permis de tester leurs performances, l'un contre l'autre
+et contre la programmation linéaire en nombre entiers.\\
+
+Pour représenter les graphes, j'ai utilisé la matrice d'adjacence.\\
+
+\underline{Remarque} : sous \verb?CHOCO?, j'ai remplacé la contrainte $c_i \leq z$ $\forall i \in V$
+ par $z = \underset{v_i\in V}{\max} (c_i)$.
+Des tests que j'ai effectué avec \verb?CP? montrent que la contrainte $c_i \leq z$ $\forall i \in V$
+est en fait très légèrement meilleure (on explore quelques noeuds de moins pour la résolution).
+
+\subsubsection{Optimisations}
+De même que précédemment, le modèle peut être amélioré.\\
+J'ai choisit d'optimiser celui-ci dans le programme pour \verb?CP? car ce solveur se révèle plus
+performant que \verb?CHOCO? comme nous le verrons plus loin (section \ref{tests}).\\
+
+J'y ai introduit toutes les optimisations vu précédemment (cf sous-section \ref{opt})
+n'ayant pas trait au programme linéaire, ce qui correspond aux points : \ref{p1},
+\ref{p2}, \ref{p3}, \ref{p4}, \ref{p5}, \ref{p6}, \ref{p7} et \ref{p8}.
+
+\section{Programmes et outils}
+\subsection{Programmes utilisés}
+Comme expliqué plus haut, j'ai utilisé \verb?OPL? (modélisation), \verb?CPLEX? (programmation linéaire en nombres entiers)
+et \verb?CP? (programmation par contraintes)
+de \verb?IBM - ILOG? \cite{ibm} pour modéliser et
+résoudre les problèmes.\\
+J'ai également utilisé \verb?CHOCO? \cite{choco} pour la programmation par contraintes.\\
+
+Outre les solveurs, j'ai utilisé \verb?nauty? \cite{nauty} de Brendan D. McKay pour générer quelques graphes (\verb?nauty?
+permet d'énumérer des graphes non isomorphes). Toutefois, celui-ci énumérant tous les graphes, il devient inutilisable
+dès qu'on veut obtenir des graphes ayant plus de 10 sommets. J'ai donc écrit des programmes me permettant de
+générer des graphes. Vous trouverez plus de détails à leurs propos dans la section suivante.\\
+
+Pour trouver une clique maximum dans un graphe, j'ai utilisé \verb?Cliquer? \cite{cliquer} de
+Sampo Niskanen et Patric R. J. Östergård. Ce programme m'a permis d'évaluer les performances
+de mon heuristique et s'il était envisageable de chercher la clique max dans un graphe pour
+colorier celui-ci (pour ceci, il faudrait que le coût pour la recherche d'une clique max soit
+négligeable devant le coût de la coloration).
+
+\subsection{Mes programmes}
+J'ai écrit les modèles pour \verb?CPLEX? et \verb?CP? en \verb?OPL? (c'est le langage de modélisation de
+\verb?IBM - ILOG? \cite{ibm}).\\
+
+Comme expliqué plus haut, j'avais besoin d'un outil me permettant de générer des graphes.
+J'ai donc utilisé la \verb?Boost Graph Library? \cite{bgl} pour écrire des programmes (en \verb?C++?)
+me permettant d'importer des graphes du challenge Dimacs \cite{dimacs} de coloration et de générer des multigraphes
+connexes dont la répartition des arêtes suit une loi uniforme.\\
+
+Afin de visualiser ces graphes (soit générés, soit importés), j'ai également introduit une option
+dans mes programmes qui permet de générer un fichier correspondant au graphe
+au format \verb?dot? pour \verb?graphviz?.
+
+
+J'ai également codé une heuristique très basique de recherche de clique dans un graphe, l'objectif étant
+de démontrer l'interêt où non de prendre en compte une clique pour la coloration.
+L'heuristique est sans garantie. Elle prend le sommet de plus grand degré et son voisin
+de plus grand degré puis cherche le sommet voisin des deux premiers de plus grand degré et ainsi de suite.\\
+Afin de pouvoir prendre en compte cette clique, mon programme réordonne ensuite les sommets pour que
+ceux de la clique soient en tête de la matrice d'adjacence.\\
+
+Pour résoudre un problème, trois possibilités se présentent donc :
+\begin{enumerate}
+ \item on dispose d'un fichier au format dimacs pour la coloration de graphes.\\
+    Il suffit alors de le soumettre au parser qui génère un fichier qu'on peut soumettre au solveur.
+ \item on génère aléatoirement un graphe.\\
+    Le fichier généré est alors au format adéquate.
+ \item on dispose de la matrice d'adjacence du graphe.\\
+    Il suffit de la mettre en forme pour pouvoir soumettre le graphe au solveur.
+\end{enumerate}
+
+
+Tests : limitations temps / ressources (au labo vieux CPLEX / CP et Gantt chargé)
+diff CPLEX 10 / 12 symétries
+
+CPLEX 12 moins bonnes perfs que 10 sur graphes complets, premiers modèles
+
+
+Le modèle doit être lancé avec un fichier contenant :
+le nombre d'arêtes du graphe
+ dans une première version
+simple ne prennant en compte que le modèle et utilisant comme 
+CPLEX 32 et 64 bit => tester l'outil
+p\\\\
+\section{Expérimentation / Analyse}
+\label{tests}
+Attention : CPLEX multicoeur pas CP
+\section{Conclusion}
+Perspectives : 1 h de CP = optimal non prouvé
+dépends : densité + nb sommets/arêtes
+cf ideas
+clique de taille max + performante / meilleure heuristique
+toutes les approches ne sont pas équivalentes !!! -> reliements contractions

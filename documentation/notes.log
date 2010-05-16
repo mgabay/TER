@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.11.28)  28 APR 2010 19:55
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.11.28)  16 MAY 2010 18:52
 entering extended mode
  %&-line parsing enabled.
 **notes.tex
@@ -561,8 +561,8 @@ File: Images/graph-color2.png Graphic file (type png)
 <use Images/graph-color2.png> [1
 
 
-{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Images/graph-color2.pn
-g>]) (./notes.toc)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Images/graph-color2.png>
+]) (./notes.toc)
 \tf@toc=\write5
 \openout5 = `notes.toc'.
 
@@ -576,7 +576,17 @@ l.62 \include{Notes/notes}
 ]
 \openout2 = `Notes/notes.aux'.
 
- (./Notes/notes.tex [2
+ (./Notes/notes.tex
+
+LaTeX Warning: Citation `berge-graphes' on page 2 undefined on input line 57.
+
+
+LaTeX Warning: Citation `berge-arretes' on page 2 undefined on input line 59.
+
+
+LaTeX Warning: Citation `berge-sommets' on page 2 undefined on input line 61.
+
+[2
 
 ]pdfTeX warning (ext4): destination with the same identifier (name{defin.2}) ha
 s been already used, duplicate ignored
@@ -688,20 +698,37 @@ name{corollaire.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.333 \begin{corollaire}
-                        pdfTeX warning (ext4): destination with the same identi
-fier (name{defin.7}) has been already used, duplicate ignored
+                        
+
+LaTeX Warning: Citation `jensen1996graph' on page 7 undefined on input line 363
+.
+
+pdfTeX warning (ext4): destination with the same identifier (name{defin.7}) has
+ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.366 \begin{defin}
-                   [Coloring number] [7]pdfTeX warning (ext4): destination with
- the same identifier (name{defin.8}) has been already used, duplicate ignored
+                   [Coloring number] [7]
+
+LaTeX Warning: Citation `jensen1996graph' on page 8 undefined on input line 398
+.
+
+pdfTeX warning (ext4): destination with the same identifier (name{defin.8}) has
+ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.404 \begin{defin}
                    ) [8]
 \openout2 = `Notes/ideas.aux'.
 
- (./Notes/ideas.tex)
+ (./Notes/ideas.tex
+
+LaTeX Warning: Citation `jensen1996graph' on page 9 undefined on input line 5.
+
+
+LaTeX Warning: Citation `jensen1996graph' on page 9 undefined on input line 6.
+
+)
 Overfull \hbox (21.8531pt too wide) in paragraph at lines 3--63
 []\OT1/cmr/m/n/12 L'identification d'un graphe pla-naire se fait en $\OML/cmm/m
 /it/12 O\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 n\OT1/cmr/m/n/12 )$ : [][]$\OT1/cmtt/
@@ -715,29 +742,35 @@ m/n/12 http : / / en . wikipedia . org / wiki / Planarity _
 ] (./notes.bbl) [10
 
 ] (./notes.aux (./Titre/notes.aux) (./Notes/notes.aux)
-(./Notes/ideas.aux)) ) 
+(./Notes/ideas.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 6100 strings out of 256216
- 78949 string characters out of 1917071
- 147816 words of memory out of 1500000
- 9177 multiletter control sequences out of 10000+200000
+ 6112 strings out of 256216
+ 79043 string characters out of 1917071
+ 147678 words of memory out of 1500000
+ 9183 multiletter control sequences out of 10000+200000
  12844 words of font info for 47 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
  27i,8n,43p,222b,410s stack positions out of 5000i,500n,6000p,200000b,15000s
-</usr/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb></usr
-/share/texmf/fonts/type1/bluesky/cm/cmbxti10.pfb></usr/share/texmf/fonts/type1/
-bluesky/cm/cmcsc10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmex10.pfb></us
-r/share/texmf/fonts/type1/bluesky/cm/cmmi12.pfb></usr/share/texmf/fonts/type1/b
-luesky/cm/cmmi6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi8.pfb></usr/sh
-are/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesk
-y/cm/cmr6.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr8.pfb></usr/share/tex
-mf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/c
-msy8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmti12.pfb></usr/share/texmf/
-fonts/type1/bluesky/cm/cmtt12.pfb></usr/share/texmf/fonts/type1/bluesky/ams/msb
-m10.pfb>
-Output written on notes.pdf (11 pages, 207878 bytes).
+</usr/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb></usr/share/texmf/fonts/t
+ype1/bluesky/cm/cmbxti10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmcsc10.p
+fb></usr/share/texmf/fonts/type1/bluesky/cm/cmex10.pfb></usr/share/texmf/fonts/
+type1/bluesky/cm/cmmi12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi6.pfb>
+</usr/share/texmf/fonts/type1/bluesky/cm/cmmi8.pfb></usr/share/texmf/fonts/type
+1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr6.pfb></usr/
+share/texmf/fonts/type1/bluesky/cm/cmr8.pfb></usr/share/texmf/fonts/type1/blues
+ky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy8.pfb></usr/share
+/texmf/fonts/type1/bluesky/cm/cmti12.pfb></usr/share/texmf/fonts/type1/bluesky/
+cm/cmtt12.pfb></usr/share/texmf/fonts/type1/bluesky/ams/msbm10.pfb>
+Output written on notes.pdf (11 pages, 211945 bytes).
 PDF statistics:
- 271 PDF objects out of 1000 (max. 8388607)
- 87 named destinations out of 1000 (max. 131072)
+ 278 PDF objects out of 1000 (max. 8388607)
+ 93 named destinations out of 1000 (max. 131072)
  110 words of extra memory for PDF output out of 10000 (max. 10000000)
 

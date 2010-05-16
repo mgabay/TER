@@ -1,7 +1,0 @@
-\clearpage
-\section{Idées}
-L'identification d'un graphe planaire se fait en $O(n)$ :
-\url{http://en.wikipedia.org/wiki/Planarity_testing}
-
-La coloration avec 6 couleurs se fait en $O(n)$ (cf \cite{jensen1996graph} p33).\\
-La coloration avec 5 couleurs se fait en $O(n^2)$ (cf \cite{jensen1996graph} p33).

@@ -16,11 +16,11 @@ MIP Presolve modified 151 coefficients.
 Aggregator did 88 substitutions.
 Reduced MIP has 203 rows, 116 columns, and 546 nonzeros.
 Reduced MIP has 88 binaries, 28 generals, 0 SOSs, and 0 indicators.
-Presolve time =    0,00 sec.
+Presolve time =    0,04 sec.
 MIP emphasis: balance optimality and feasibility.
 MIP search method: dynamic search.
 Parallel mode: deterministic, using up to 2 threads.
-Root relaxation solution time =    0,00 sec.
+Root relaxation solution time =    0,02 sec.
 
         Nodes                                         Cuts/
    Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
@@ -41,13 +41,13 @@ Mixed integer rounding cuts applied:  2
 Zero-half cuts applied:  25
 
 Root node processing (before b&c):
-  Real time             =    0,06
+  Real time             =    0,10
 Parallel b&c, 2 threads:
   Real time             =    0,01
-  Sync time (average)   =    0,00
-  Wait time (average)   =    0,00
+  Sync time (average)   =    0,01
+  Wait time (average)   =    0,01
                           -------
-Total (root+branch&cut) =    0,07 sec.
+Total (root+branch&cut) =    0,11 sec.
 
 <<< solve
 

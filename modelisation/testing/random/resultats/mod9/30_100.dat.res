@@ -1,5 +1,5 @@
 
-<<< initial
+<<< setup
 
 
 
@@ -8,42 +8,58 @@ Le degré maximum du graphe simple correspondant est : 13
 
 Le nombre d'arrètes du graphe simple correspondant est : 89
 
-<<< generate model
+<<< generate
 
 Tried aggregator 1 time.
-MIP Presolve eliminated 431 rows and 32 columns.
+MIP Presolve eliminated 432 rows and 32 columns.
 MIP Presolve modified 159 coefficients.
 Aggregator did 75 substitutions.
 Reduced MIP has 177 rows, 103 columns, and 482 nonzeros.
-Presolve time =    0.01 sec.
+Reduced MIP has 75 binaries, 28 generals, 0 SOSs, and 0 indicators.
+Presolve time =    0,00 sec.
 Clique table members: 2.
 MIP emphasis: balance optimality and feasibility.
-Root relaxation solution time =    0.00 sec.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 2 threads.
+Root relaxation solution time =    0,00 sec.
 
         Nodes                                         Cuts/
-   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap         Variable B Parent  Depth
+   Node  Left     Objective  IInf  Best Integer     Best Node    ItCnt     Gap
 
-      0     0        3.0000    35                      3.0000       50         
-                     3.0000    69                   Cuts:  76      138         
-                     3.0000    60                  Cuts:  136      169         
-                     3.0000    53                    Cuts:  9      198         
-                     3.0000    36                    Cuts:  4      213         
-                     3.0000    29                    Cuts:  8      220         
-*     0+    0                   0       14.0000        3.0000      220   78.57%
-*    20     9                   0        5.0000        4.0000      305   20.00%          y#5#16 U     19     18
-*    28     1                   0        4.0000        4.0000      394    0.00%          y#7#17 D     27      7
+      0     0        3,0000    35                      3,0000       50         
+      0     0        3,0000    28                    Cuts: 86       97         
+      0     0        3,0000    23                    Cuts: 35      122         
+      0     0        3,0000    14                    Cuts: 22      151         
+      0     0        3,0000    10                    Cuts: 11      170         
+      0     0        3,0192    46                     Cuts: 9      196         
+      0     0        3,2000    47                    Cuts: 10      206         
+      0     0        3,2000    48                    Cuts: 13      218         
+      0     0        3,5000    39                     Cuts: 9      228         
+      0     0        4,0000    21                     Cuts: 5      237         
+      0     0        4,0000    24                 ZeroHalf: 5      247         
+*     0+    0                            5,0000        4,0000      247   20,00%
+      0     2        4,0000    24        5,0000        4,0000      247   20,00%
+*    12     9      integral     0        4,0000        4,0000      304    0,00%
 
-Clique cuts applied:  18
-Implied bound cuts applied:  40
-Mixed integer rounding cuts applied:  9
-Gomory fractional cuts applied:  24
+Clique cuts applied:  14
+Implied bound cuts applied:  15
+Mixed integer rounding cuts applied:  2
+Zero-half cuts applied:  22
+
+Root node processing (before b&c):
+  Real time             =    0,06
+Parallel b&c, 2 threads:
+  Real time             =    0,02
+  Sync time (average)   =    0,00
+  Wait time (average)   =    0,01
+                          -------
+Total (root+branch&cut) =    0,07 sec.
 
 <<< solve
 
 
-
-OBJECTIVE: 4.00
-coloration : [1 2 3 4 1 1 2 1 1 3 3 4 1 4 4 3 3 3 1 2 3 2 2 2 1 1 3 4 2 4]
+OBJECTIVE: 4
+coloration : [1 2 3 3 1 1 4 1 1 3 1 3 4 2 4 1 2 4 4 1 4 2 3 4 1 2 3 3 2 2]
 
 <<< post process
 

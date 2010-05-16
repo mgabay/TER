@@ -42,7 +42,7 @@ Mixed integer rounding cuts applied:  3
 Zero-half cuts applied:  10
 
 Root node processing (before b&c):
-  Real time             =    0,02
+  Real time             =    0,03
 Parallel b&c, 2 threads:
   Real time             =    0,00
   Sync time (average)   =    0,00
