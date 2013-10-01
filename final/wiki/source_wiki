@@ -1,0 +1,241 @@
+{{Sujet ter
+| labo = G-SCOP
+| titre = Quelle taille de graphe peut-on colorier optimalement avec un ordinateur aujourd'hui?
+| equipe = Optimisation et Systèmes de Production
+| encadrants = nadia.brauner@imag.fr
+}}
+[[Catégorie:TER]]
+
+=== Etudiant === 
+
+Michaël Gabay
+
+=== Introduction === 
+
+La coloration de graphe est un problème omniprésent dans les mathématiques et l’industrie de nos jours.
+Ce problème
+est très difficile et fait l’objet de nombreux travaux de recherche. Toutefois, dans un contexte d’évolution constante des techniques,
+de la puissance de calcul et des logiciels, on peut être amené à se
+poser la question suivante :
+<center>'''[[Quelle taille de graphe peut-on colorier optimalement avec un ordinateur aujourd'hui?]]'''</center>
+
+L’objectif de ce TER est de déterminer - compte-tenu des outils et ressources disponibles aujourd’hui - quelles sont les limites pour la coloration optimale de graphes.
+
+=== Eléments de pré-requis ===
+<p>
+[[Image:Graph-color2.png|300px|thumb|right|Une bonne coloration]]
+[[Image:Graph-color-opt.png|300px|thumb|right|Une coloration optimale]]
+</p>
+
+<p>
+*Coloration de graphes (coloration des sommets) :<br />
+Colorier un graphe c’est attribuer une couleur à chacun de ses
+sommets de sorte que deux sommets adjacents (i.e. reliés par
+une arête) soient de couleurs différentes.<br />
+On peut, de même, définir la coloration des
+arêtes mais ce problème se ramène très facilement à un problème de coloration des sommets en
+considérant le graphe de lignes correspondant.
+</p>
+
+<p>
+*Nombre chromatique :<br />
+Le nombre chromatique est le plus petit nombre de couleurs
+nécessaire pour colorier un graphe.
+</p>
+
+<p>
+*Coloration optimale :<br />
+Une coloration optimale d'un graphe est une coloration utilisant un nombre de couleurs minimal, i.e. égal au nombre chromatique χ(G).
+</p>
+
+<p>
+*Complexité :<br />
+Déterminer le nombre chromatique d’un graphe quelconque est
+un problème <math>\mathcal{NP}-complet</math>
+</p>
+
+<p>
+*[http://fr.wikipedia.org/wiki/PLNE#Programmation_lin.C3.A9aire_en_nombres_entiers Programmation Linéaire en Nombre Entiers (PLNE)]<br />
+</p>
+
+<p>
+*[http://fr.wikipedia.org/wiki/Programmation_par_contraintes Programmation Par Contraintes (PPC)]<br />
+</p>
+
+<p>
+* Coupe :<br />
+En programmation linéaire, une coupe est une contrainte séparant un ensemble de solutions en deux parties.<br />
+Dans l'image suivante, vous pouvez voir un exemple de coupe lorsqu'on représente les espaces des solutions par des patatoïdes
+(dans le cadre de ce ter, une solution réalisable est une bonne coloration et une solution optimale est une
+coloration optimale) :
+[[Image:patatoide-cut.png|center]]
+Je me suis servi des coupes pour ne considérer qu'un sous ensemble de l'ensemble des solutions pour la
+résolution. Une condition essentielle pour obtenir une coloration optimale est donc que l'intersection de toutes
+mes coupes entre elles et avec l'ensemble des solutions optimales soit non vide (i.e. <math>C_1 \cap C_2 \cap \dots \cap S_{opt} \neq \emptyset</math>).
+</p>
+
+<p>
+*Densité :<br />
+La densité d'un graphe est le rapport du nombre d'arêtes du graphe sur le nombre total d'arêtes possibles
+</p>
+
+=== Travail réalisé ===
+
+J'ai modélisé le problème en programme linéaire en nombre entier et en programme par contraintes et j'ai utilisé
+des solveurs pour résoudre le problème. J'ai ensuite optimisé les modèles pour la résolution en ajoutant des coupes,
+en ajoutant des contraintes ou en supprimant des contraintes superflues et en ajoutant des majorations et minorations
+du nombre chromatique.
+
+==== Les modèles ====
+Dans les modèles suivants, on se place dans un graphe G=(V,E), ''c'' est le vecteur représentant la coloration,
+''y'' permet de linéariser la contrainte <math>|c_i - c_j| \geq \mathbf{1}_{(i,j) \in E}</math> - dit autrement, cette
+contrainte correspond à "deux sommets adjacents ne sont pas de même couleur".
+
+===== Programmation Linéaire en Nombres Entiers (PLNE) =====
+Le modèle pour la programmation linéaire en nombres entiers est le suivant :<br \>
+<p>
+<math>
+\left\{
+    \begin{array}{ll}
+        \text{min }z & \\
+	c_i \leq z & \forall i \in V\\
+        c_i \leq c_j - 1 + n\times y_{i,j}& \forall (i,j)\in E\\
+        c_j \leq c_i - 1 + n\times (1-y_{i,j})& \forall (i,j)\in E\\
+	y_{i,j} \in \{0,1\} & \forall (i,j)\in E\\
+	c \in (\mathbb{N}^*)^{|V|}
+    \end{array}
+\right.
+</math>
+</p>
+Comme vous pouvez le constater, cette formulation n'est pas complètement naturelle et il n'est pas évident,
+à partir de celle-ci de comprendre qu'il s'agit d'un problème de coloration de graphes.
+
+===== Programmation Par Contraintes (PPC) =====
+Le modèle utilisé est le suivant :<br />
+<p>
+<math>
+\left\{
+    \begin{array}{ll}
+        \text{min }z & \\
+	c_i \leq z & \forall i \in V\\
+        c_i \neq c_j & \forall (i,j)\in E\\
+	c \in (\mathbb{N}^*)^{|V|}
+    \end{array}
+\right.</math>
+</p>
+Contrairement au modèle précédent, celui-ci est très naturel : on comprends facilement à quoi correspondent les contraintes.
+C'est dans cette simplicité de modélisation que réside la puissance de la programmation par contraintes.
+
+==== Résolution ====
+Pour modéliser et résoudre le PLNE, j'ai utilisé ''CPLEX'' et ''OPL''.
+Pour résoudre le PPC j'ai utilisé ''CP'' avec ''OPL'' et ''CHOCO''.<br \>
+''CPLEX'' et ''CP'' sont des solveurs de ''IBM - ILOG''.
+''OPL'' est le langage de modélisation de ''IBM - ILOG''. Il permet de
+modéliser facilement des problèmes complexes pour les soumettre à ''CP'' et ''CPLEX''.
+[http://www.emn.fr/z-info/choco-solver/ ''CHOCO''] est un solveur open-source.<br />
+
+Afin de pouvoir résoudre le problème le plus efficacement possible, j'ai recherché 
+des majorations, des coupes et des contraintes permettant d'accélérer la résolution.<br />
+J'ai également essayé d'optimiser l'aspect algorithmique du problème en évitant des opérations inutiles
+(placement des contraintes, initialisation et ajout de contraintes sous certaines conditions...).
+
+==== Optimisations ====
+Afin de permettre la coloration des plus grands graphes possibles, il a fallu
+optimiser les modèles et les contraintes pour la résolution.<br />
+Les points suivants constituent une liste non exhaustive des optimisations réalisées :
+*Fixer la couleur du premier sommet
+*Ajout de la minoration suivante : <math>\chi(G) \geq \frac{n^2}{n^2-2m}</math> (on a égalité si le graphe est complet)
+*Initialisation de <math>y_{1,i}</math> et <math>y_{i,1}</math>
+*Ajout de certaines contraintes conditionné à l'adjacence des sommets
+*Ajout des contraintes de non adjacence des couleurs pour j > i seulement
+*Teste si le graphe est complet (la coloration est alors triviale).
+*Ajout de la contrainte <math>y_{i,j}=1-y_{j,i}</math>
+*Ajout de la coupe <math>c_i \leq i</math>
+*Prise en compte d'une clique dans la coloration
+
+==== Expérimentations ====
+<p>
+La dernière étape a été de tester expérimentalement les performances de la résolution.
+Pour ce faire, j'ai soumis mes programmes à une campagne de tests en utilisant d'une part des
+graphes structurés, issus du [http://dimacs.rutgers.edu/Challenges/ challenge DIMACS] de coloration de
+graphes et d'autre part des multigraphes "aléatoires" dont la répartition des arêtes suit une loi uniforme.
+</p>
+
+<p>
+Il en ressort que la résolution en utilisant ''CP'' (programmation par contraintes) est beaucoup plus
+performante qu'en utilisant ''CPLEX'' (PLNE).<br />
+On peut colorier les graphes ayant moins 50 sommets avec les deux modèles. Mais on ne peut guère aller
+plus loin (dans le cas général) avec la PLNE. En revanche, on peut colorier des graphes ayant jusqu'à 75 sommets
+avec une densité de 0,5 en utilisant la PPC.<br />
+Lorsque la densité est faible on peut souvent aller (beaucoup) plus loin : j'ai par exemple pu colorier en 7 secondes 
+(dont seulement 0,08s pour la résolution) le
+graphe correspondant au carré latin d'ordre 30 qui a 900 sommets et 26100 arêtes, d'où une densité de 0,065.
+</p>
+
+<p>
+Enfin, le dernier résultat et probablement un des résultats les plus intéressants de ce ter, est qu'on obtient très rapidement une
+solution optimale lorsqu'on utilise
+la programmation par contraintes.
+Par exemple, dans toutes les instances du challenge DIMACS ayant moins de 1000 sommets, l'optimal était trouvé en quelques centièmes
+de secondes, voire quelques secondes.
+Néanmoins, la preuve peut-être très longue (généralement, moins de 1% du temps de calcul
+est nécessaire pour trouver une solution optimale et le reste du temps de calcul est passé à chercher des meilleures
+solutions qui n'existent pas).<br />
+Compte-tenu de la difficulté pour caractériser les limites de la coloration optimale,
+on peut donc envisager d'utiliser une sorte "d'heuristique exacte" pour colorier un graphe lorsque le problème se pose :<br />
+On alloue un temps à la résolution optimale et, passé ce temps, on prend la meilleure
+coloration trouvée. Cette coloration sera la coloration optimale si l’algorithme a terminé et sinon elle sera la
+meilleure bonne coloration obtenue. De plus, on aura de fortes chances d’avoir en fait une coloration optimale.<br />
+Une autre piste intéressante, suggérée par Jérôme Malick lors de ma soutenance est d'utiliser la programmation par contraintes
+pour trouver rapidement une borne supérieure ''M'' pour le nombre chromatique (qui correspondra souvent à l'optimal pour les
+raisons expliquées ci-dessus) et d'utiliser ensuite la programmation linéaire en nombres entiers, en ayant ajouté la contrainte
+<math>\chi(G) \leq M</math> pour prouver l'optimalité (ou éventuellement trouver une meilleure solution). 
+</p>
+
+=== Conclusion === 
+<p>
+J’ai utilisé la programmation linéaire en nombre entiers et la programmation par contraintes
+pour résoudre optimalement le problème de coloration de graphe.
+En utilisant des logiciels à la pointe pour résoudre ces problèmes, j’ai pu estimer quelles sont les
+limites de la coloration optimale des graphes.</p>
+
+<p>
+À la question “Quelle taille de graphe peut-on colorier optimalement avec un ordinateur aujourd’hui ?”,
+je suis en mesure de répondre qu’avec les modèles que j’ai mis au point et les logiciels que j’ai utilisé
+(notamment ''CP''), on peut colorier optimalement des graphes ayant une densité de 0.5
+jusqu’à au moins 75 sommets et on peut même aller beaucoup plus loin lorsque la densité est plus faible.
+</p>
+
+<p>
+Lorsque le nombre de sommets du graphe est inférieur à 1000, je pense qu’on peut tirer un très
+grand bénéfice de "l'heuristique exacte" proposée plus haut. Lorsque celui-ci est supérieur, il est
+à mon avis plus judicieux de recourir directement à une heuristique spécialisée.
+</p>
+
+<p>
+Mes modèles peuvent de plus être encore améliorés. En particulier, on peut introduire une étape
+de pré-résolution dans laquelle on trouverait une coloration avec une heuristique afin d’obtenir un
+majorant du nombre chromatique qu’on injecterait ensuite dans le modèle. De plus, on pourrait
+utiliser une meilleure heuristique que celle que j’ai utilisé pour trouver une clique. On pourrait
+même éventuellement trouver une clique de taille maximum avec un algorithme exacte puisque
+les logiciels de résolution exacte du problème CLIQUE MAX permettent
+de trouver rapidement une clique maximum dans des graphes ayant moins de 200 sommets.
+</p>
+<p>
+Il également est possible d’utiliser d’autres approches. En particulier, il reste une piste importante
+à explorer qui est celle de l’écriture d’algorithmes spécialisés, utilisant par exemple le principe de
+reliements-contractions et de la séparation des pièces.
+</p>
+
+=== Références === 
+
+[1] Claude Berge, ''Graphes et hypergraphes'', chapitre 12. Indice chromatique, pages 236–259, chapitre 15. Nombre chromatique, pages 314–346. Dunod, Paris, 1970.
+
+[2] T.R. Jensen and B. Toft. ''Graph coloring problems''. Bull. Amer. Math. Soc. 33 (1996).
+
+[3] [http://mat.tepper.cmu.edu/ Michael Trick’s Operations Research Page].
+
+=== Documents additionnels === 
+
+* Transparents de la soutenance [[Media:TER0910_soutenance_Michael_Gabay.pdf‎]]
+* Rapport [[Media:Coloration_Michael_Gabay.pdf]]

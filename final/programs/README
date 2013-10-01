@@ -1,0 +1,30 @@
+Les programmes peuvent être compilés avec la commane make (les versions
+fournies sont compilés pour système linux 64 bits).
+
+****** gengraph ******
+gengraph permet de générer des multigraphes aléatoires (distribution uniforme)
+connexes. Pensez à rediriger la sortie vers un fichier pour pouvoir ensuite le
+soumettre au solveur (>).
+Ce programme utilise l'heuristique de recherche d'une clique et réordonne les
+sommets.
+
+****** read_dimacs ******
+Lit un fichier dimacs et créé un fichier de données lisible par le modèle.
+Pensez à rediriger la sortie (>).
+Pour ne pas utiliser l'heuristique et réordonner les sommets, ajoutez
+l'option -nr après le nom de fichier.
+
+
+*** images des graphes ***
+Pour générer les images des graphes (aléatoires ou dimacs) utilisez
+l'option -dot fichier_image le programme génèrera une représentation du graphe
+au format dot pour graphviz.
+
+
+exemple d'utilisation :
+# génération du modèle et de la description de l'image :
+./read_dimacs ../../Instances\ de\ tests/dimacs_benchmark/queen/queen6_6.col -dot queen6_6.dot > queen6_6.dat
+# compilation de l'image du graphe
+dot queen6_6.dot -Tpng -o queen6_6.png
+# résolution du problème
+oplrun ../../Modèles\ finaux/mod_CP.mod queen6_6.png
